@@ -5,6 +5,11 @@ import { IoLogoInstagram } from 'react-icons/io5';
 import { LuMailPlus } from 'react-icons/lu';
 
 function Footer() {
+   const handleClickEmail = () => {
+     const mailtoLink = `mailto:santosnevesimoveis3@gmail.com`;
+     window.location.href = mailtoLink;
+   };
+
   return (
     <div>
       <div className="grid grid-cols-3 bg-gray-800 p-4 w-full  z-10 text-white font-medium pt-4">
@@ -26,7 +31,10 @@ function Footer() {
           </span>
         </div>
         <div className="flex justify-center items-center gap-4">
-          <span className="bg-gray-500 p-2 rounded hover:bg-orange-600 cursor-pointer transition duration-300 ease-in-out transform">
+          <span
+            onClick={() => handleClickEmail()}
+            className="bg-gray-500 p-2 rounded hover:bg-orange-600 cursor-pointer transition duration-300 ease-in-out transform"
+          >
             <LuMailPlus size={20} />
           </span>
           <span
