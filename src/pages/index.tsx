@@ -2,63 +2,13 @@ import DefaultSelect from '@/components/deafultSelect';
 import DefaultButton from '@/components/defaultButton';
 import DefaultTextInput from '@/components/defaultTextInput';
 import { randomPicture } from '@/utils/randomPicture';
-import { Image, Input, Button, SimpleGrid, RangeSlider, RangeSliderMark, RangeSliderTrack, RangeSliderFilledTrack, RangeSliderThumb, Box } from '@chakra-ui/react';
-import { useState } from 'react';
+import {
+  Image,
+  SimpleGrid,
+  Switch,
+} from '@chakra-ui/react';
 
 export default function Home() {
-  const [sliderValue, setSliderValue] = useState([30, 80])
-   
-  const RangeSliderMarkExample = () => {
-  return (
-    // <RangeSlider aria-label={['min', 'max']} colorScheme='blue' defaultValue={[30, 80]} onChange={(val) => setSliderValue(val)}>
-    //   <RangeSliderMark value={25} mt='1' ml='-2.5' fontSize='sm'>
-    //     25%
-    //   </RangeSliderMark>
-    //   <RangeSliderMark value={50} mt='1' ml='-2.5' fontSize='sm'>
-    //     50%
-    //   </RangeSliderMark>
-    //   <RangeSliderMark value={75} mt='1' ml='-2.5' fontSize='sm'>
-    //     75%
-    //   </RangeSliderMark>
-    //   <RangeSliderMark
-    //     value={sliderValue[0]}
-    //     textAlign='center'
-    //     bg='blue.500'
-    //     color='blue'
-    //     mt='-10'
-    //     ml='-5'
-    //     w='12'
-    //   >
-    //     {sliderValue[0]}%
-    //   </RangeSliderMark>
-    //   <RangeSliderMark
-    //     value={sliderValue[1]}
-    //     textAlign='center'
-    //     bg='blue.500'
-    //     color='blue'
-    //     mt='-10'
-    //     ml='-5'
-    //     w='12'
-    //   >
-    //     {sliderValue[1]}%
-    //   </RangeSliderMark>
-    //   <RangeSliderTrack bg='purple.100'>
-    //     <RangeSliderFilledTrack bg='blue' />
-    //   </RangeSliderTrack>
-    //   <RangeSliderThumb boxSize={6} index={0} />
-    //   <RangeSliderThumb boxSize={6} index={1} />
-    // </RangeSlider>
-    <RangeSlider aria-label={['min', 'max']} defaultValue={[10, 30]}>
-      <RangeSliderTrack>
-        <RangeSliderFilledTrack />
-      </RangeSliderTrack>
-      <RangeSliderThumb index={0} />
-      <RangeSliderThumb index={1} />
-    </RangeSlider>
-  );
-}
-
-
   return (
     <div className="flex flex-col w-full h-full bg-red-100">
       <div className="w-full h-[650px] mb-[400px]">
@@ -67,7 +17,7 @@ export default function Home() {
           style={{ objectFit: 'cover' }}
           width={'100%'}
           height={'100%'}
-          alt="Picture of the author"
+          alt="Imagem de fundo com a cidade de Belém"
         />
       </div>
 
@@ -88,18 +38,11 @@ export default function Home() {
           <DefaultSelect options={[]} placeholder="Tipo de Imóvel" />
           <DefaultSelect options={[]} placeholder="Cidade" />
           <DefaultSelect options={[]} placeholder="Bairro" />
-          <div>
-            <RangeSlider
-              className="w-full bg-purple-500 h-5"
-              aria-label={['min', 'max']}
-              defaultValue={[10, 30]}
-            >
-              <RangeSliderTrack>
-                <RangeSliderFilledTrack />
-              </RangeSliderTrack>
-              <RangeSliderThumb index={0} />
-              <RangeSliderThumb index={1} />
-            </RangeSlider>
+          <DefaultTextInput placeholder="Valor Mínimo" />
+          <DefaultTextInput placeholder="Valor Máximo" />
+          <div className='flex flex-col' >
+            <span>Apenas Financiavéis?</span>
+            <Switch colorScheme='green' />
           </div>
         </SimpleGrid>
       </div>

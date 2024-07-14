@@ -2,7 +2,7 @@ import { navbarItems } from '@/constants/layout/navBarItems';
 import { defaultColors } from '@/constants/styles/defaultColors';
 import { NavbarItemsConfig } from '@/types/constants/navbarItemsInterface';
 import { Search2Icon } from '@chakra-ui/icons';
-import { Button, Flex, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { Button, Flex, SimpleGrid, Text } from '@chakra-ui/react';
 
 function Header() {
   return (
