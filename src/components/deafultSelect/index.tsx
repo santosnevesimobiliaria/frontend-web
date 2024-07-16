@@ -15,7 +15,7 @@ interface IDefaultSelect {
 function DefaultSelect({ placeholder, options }: IDefaultSelect) {
   return (
     <Select
-      className="w-full h-10 rounded-lg pl-4 cursor-pointer text-zinc-600 outline-none"
+      className="w-full h-10 rounded-lg pl-4 cursor-pointer text-zinc-600 outline-none bg-white"
       icon={<></>}
       placeholder={placeholder}
     >

@@ -1,3 +1,4 @@
+import DefaultButton from '@/components/defaultButton';
 import { navbarItems } from '@/constants/layout/navBarItems';
 import { defaultColors } from '@/constants/styles/defaultColors';
 import { NavbarItemsConfig } from '@/types/constants/navbarItemsInterface';
@@ -28,18 +29,7 @@ function Header() {
         ))}
       </Flex>
       <Flex w={'100%'} justifyContent={'center'} alignItems={'center'}>
-        <Button
-          variant={'solid'}
-          background={defaultColors.orange}
-          textColor={defaultColors.white}
-          paddingY={8}
-          paddingX={16}
-          borderRadius={10}
-          leftIcon={<Search2Icon />}
-          className="hover:bg-[#580CEA] hover:text-white cursor-pointer transition duration-300 ease-in-out transform"
-        >
-          Buscar Imóvel
-        </Button>
+        <DefaultButton text="Buscar Imóvel" orangeSchema maxWidth={200} isSearchButton/>
       </Flex>
     </SimpleGrid>
   );
