@@ -3,7 +3,7 @@ import DefaultButton from '@/components/defaultButton';
 import DefaultRangeSlider from '@/components/defaultRangeSlider';
 import DefaultTextInput from '@/components/defaultTextInput';
 import { randomPicture } from '@/utils/randomPicture';
-import { Image, SimpleGrid, Switch } from '@chakra-ui/react';
+import { Checkbox, Image, SimpleGrid, Switch } from '@chakra-ui/react';
 
 export default function Home() {
   return (
@@ -31,7 +31,12 @@ export default function Home() {
           />
         </span>
         <span className="w-full h-[2px] bg-white" />
-        <SimpleGrid className="w-full mt-4" columns={3} spacingY={10} spacingX={3}>
+        <SimpleGrid
+          className="w-full mt-4"
+          columns={3}
+          spacingY={10}
+          spacingX={3}
+        >
           <DefaultSelect options={[]} placeholder="Tipo de Imóvel" />
           <DefaultSelect options={[]} placeholder="Cidade" />
           <DefaultSelect options={[]} placeholder="Bairro" />
@@ -39,17 +44,19 @@ export default function Home() {
             <span className="font-medium text-lg">
               Selecione a faixa de Preço
             </span>
-            <div className="flex flex-col justify-center items-center w-full h-28 px-4">
+            <div className="flex flex-col justify-center items-center w-full h-28 pl-4 pr-10">
               <DefaultRangeSlider />
             </div>
           </div>
           <div className="flex flex-col items-center w-full h-28">
-            <div className="flex flex-col gap-4">
-              <span className="font-medium text-lg">Apenas Financiavéis?</span>
-              <Switch size="lg" colorScheme="purple" />
+            <div className="flex justify-center items-center  w-full h-full">
+              {/* <span className="font-medium text-lg">Apenas Financiavéis?</span> */}
+              <Checkbox size="lg" colorScheme="green">
+                Apenas Financiavéis?
+              </Checkbox>
             </div>
           </div>
-          <span className='pt-6 w-full h-full' >
+          <span className="pt-6 w-full h-full">
             <DefaultButton text="Buscar Imóvel" isSearchButton maxWidth={300} />
           </span>
         </SimpleGrid>

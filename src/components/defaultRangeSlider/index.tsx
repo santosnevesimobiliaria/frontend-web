@@ -8,7 +8,11 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-function DefaultRangeSlider() {
+interface IPropsDefaultRangeSlider {
+  sliderCustomColor?: string;
+}
+
+function DefaultRangeSlider({ sliderCustomColor }: IPropsDefaultRangeSlider) {
   const [sliderValue, setSliderValue] = useState([0, 1000000]);
 
   return (
@@ -54,10 +58,18 @@ function DefaultRangeSlider() {
       <RangeSliderTrack bg="red.100">
         <RangeSliderFilledTrack bg={defaultColors.purple} />
       </RangeSliderTrack>
-      <RangeSliderThumb boxSize={6} index={0}>
+      <RangeSliderThumb
+        boxSize={6}
+        index={0}
+        backgroundColor={sliderCustomColor ?? 'white'}
+      >
         {/* <Box color="tomato" as={MdGraphicEq} /> */}
       </RangeSliderThumb>
-      <RangeSliderThumb boxSize={6} index={1}>
+      <RangeSliderThumb
+        boxSize={6}
+        index={1}
+        backgroundColor={sliderCustomColor ?? 'white'}
+      >
         {/* <Box color="tomato" as={MdGraphicEq} /> */}
       </RangeSliderThumb>
     </RangeSlider>

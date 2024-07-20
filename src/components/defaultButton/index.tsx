@@ -5,6 +5,7 @@ interface IDefaultButton {
   text: string;
   maxWidth?: number;
   orangeSchema?: boolean;
+  onClinkFunc?: () => any;
   colorScheme?: string;
   isLoading?: boolean;
   isSearchButton?: boolean;
@@ -14,12 +15,14 @@ function DefaultButton({
   text,
   maxWidth,
   orangeSchema,
+  onClinkFunc,
   isLoading,
   isSearchButton,
   colorScheme,
 }: IDefaultButton) {
   return (
     <Button
+      onClick={onClinkFunc}
       className={`w-full h-10 ${
         orangeSchema ? 'bg-orange-600 text-white' : 'bg-white text-orange-600'
       } rounded-lg text-sm font-medium hover:bg-[#580CEA] hover:text-white transition duration-300 ease-in-out transform`}
