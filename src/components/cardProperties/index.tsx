@@ -80,9 +80,11 @@ function CardProperties({ imageSrc }: IPropsCardProperties) {
             </span>
           </SimpleGrid>
         </div>
-        <div className="bg-red-400" >
+        <div className="flex flex-col pt-20">
           <span>Valor</span>
-          <span>R$ 700.000,00</span>
+          <span className="text-zinc-600 font-medium text-2xl">
+            R$ 700.000,00
+          </span>
         </div>
       </div>
       <div className="flex justify-between items-center px-6 h-28 bg-gray-300 rounded-b-lg text-zinc-600 font-medium cursor-pointer hover:bg-orange-600 hover:text-white">

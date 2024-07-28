@@ -12,7 +12,7 @@ function Footer() {
 
   return (
     <div>
-      <div className="grid grid-cols-3 bg-gray-800 p-4 w-full  z-10 text-white font-medium pt-4">
+      <div className="grid grid-cols-3 bg-gray-800 p-4 w-full  z-10 text-white font-medium">
         <div className="flex justify-center items-center">LOGO</div>
         <div className="flex justify-center items-center gap-6">
           <span

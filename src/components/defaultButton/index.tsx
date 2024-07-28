@@ -1,8 +1,11 @@
 import { Search2Icon } from '@chakra-ui/icons';
 import { Button } from '@chakra-ui/react';
 
+type ButtonType = 'submit' | 'reset' | 'button';
+
 interface IDefaultButton {
   text: string;
+  buttonType?: ButtonType;
   maxWidth?: number;
   orangeSchema?: boolean;
   onClinkFunc?: () => any;
@@ -13,6 +16,7 @@ interface IDefaultButton {
 
 function DefaultButton({
   text,
+  buttonType,
   maxWidth,
   orangeSchema,
   onClinkFunc,
@@ -22,6 +26,7 @@ function DefaultButton({
 }: IDefaultButton) {
   return (
     <Button
+      type={buttonType ?? 'button'}
       onClick={onClinkFunc}
       className={`w-full h-10 ${
         orangeSchema ? 'bg-orange-600 text-white' : 'bg-white text-orange-600'

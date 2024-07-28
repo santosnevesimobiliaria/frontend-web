@@ -3,8 +3,9 @@ import DefaultSelect from '@/components/deafultSelect';
 import DefaultButton from '@/components/defaultButton';
 import DefaultRangeSlider from '@/components/defaultRangeSlider';
 import DefaultTextInput from '@/components/defaultTextInput';
+import { defaultColors } from '@/constants/styles/defaultColors';
 import { randomPicture } from '@/utils/randomPicture';
-import { Checkbox, Image, SimpleGrid } from '@chakra-ui/react';
+import { AbsoluteCenter, Box, Checkbox, Divider, Image, Link, SimpleGrid } from '@chakra-ui/react';
 import { TbHomeDollar } from 'react-icons/tb';
 
 export default function Home() {
@@ -20,7 +21,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="absolute top-[600px] left-[50%] transform -translate-x-1/2 flex flex-col mx-auto items-center py-3 px-4 w-full max-w-[50%] h-[420px] bg-orange-600 text-[#FBFBFA] rounded-lg">
+      <div className="absolute top-[550px] left-[50%] transform -translate-x-1/2 flex flex-col mx-auto items-center py-3 px-4 w-full max-w-[50%] h-[500px] bg-orange-600 text-[#FBFBFA] rounded-lg">
         <span className="text-3xl font-medium mt-4">
           Encontre o Imóvel dos seus sonhos
         </span>
@@ -32,7 +33,12 @@ export default function Home() {
             maxWidth={300}
           />
         </span>
-        <span className="w-full h-[2px] bg-white" />
+        <Box position="relative" padding="10" w={'full'}>
+          <Divider />
+          <AbsoluteCenter bg="#EA580C" px="4">
+            OU
+          </AbsoluteCenter>
+        </Box>
         <SimpleGrid
           className="w-full mt-4"
           columns={3}
@@ -66,7 +72,7 @@ export default function Home() {
       <div className="flex flex-col w-full h-full items-center mt-10">
         <span className="flex justify-center items-center gap-2 text-zinc-600 font-medium text-3xl border-b-2 border-zinc-600 pb-2 px-4">
           <TbHomeDollar />
-          <span>Imóveis em Destaques</span>
+          <span>Imóveis em Destaque</span>
         </span>
         <SimpleGrid
           className="w-full mt-10"
@@ -78,9 +84,8 @@ export default function Home() {
           <CardProperties imageSrc="/images/casa2.jpg" />
           <CardProperties imageSrc="/images/casa3.jpg" />
           <CardProperties imageSrc="/images/casa1.jpg" />
-          <CardProperties imageSrc="/images/casa2.jpg" />
-          <CardProperties imageSrc="/images/casa3.jpg" />
         </SimpleGrid>
+        <Link href='/imoveis' className='text-orange-600 font-medium text-xl pt-16' >Ver todos os imóveis</Link>
       </div>
     </div>
   );

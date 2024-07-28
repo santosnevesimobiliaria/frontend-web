@@ -25,7 +25,10 @@ function Header() {
 
   return (
     <>
-      <SimpleGrid columns={3} className="h-16 bg-white text-white font-medium">
+      <SimpleGrid
+        columns={3}
+        className="h-16 bg-[#FBFBFA] text-white font-medium"
+      >
         <Flex
           w={'100%'}
           justifyContent={'center'}
@@ -86,7 +89,9 @@ function Header() {
                   Selecione a faixa de Preço
                 </span>
                 <div className="flex flex-col justify-center items-center w-[80%] pl-6">
-                  <DefaultRangeSlider sliderCustomColor={defaultColors.purple} />
+                  <DefaultRangeSlider
+                    sliderCustomColor={defaultColors.purple}
+                  />
                 </div>
               </div>
             </div>
@@ -94,7 +99,11 @@ function Header() {
 
           <DrawerFooter>
             <div className="flex w-full justify-around items-center">
-              <DefaultButton text="Cancelar" maxWidth={200} onClinkFunc={onClose}/>
+              <DefaultButton
+                text="Cancelar"
+                maxWidth={200}
+                onClinkFunc={onClose}
+              />
               <DefaultButton
                 text="Buscar Imóvel"
                 orangeSchema

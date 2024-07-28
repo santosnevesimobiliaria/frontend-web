@@ -50,7 +50,7 @@ function DefaultRangeSlider({ sliderCustomColor }: IPropsDefaultRangeSlider) {
         bg={defaultColors.purple}
         color="white"
         mt="-10"
-        ml="-5"
+        ml="-50"
         w="24"
       >
         R$ {sliderValue[1].toLocaleString('pt-BR')}
