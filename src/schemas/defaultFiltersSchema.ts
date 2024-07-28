@@ -1,12 +1,7 @@
 import * as z from 'zod';
 
-enum Type {
-  house = 'house',
-  apartament = 'apartament',
-}
-
 export const defaultFiltersSchema = z.object({
-  type: z.nativeEnum(Type).optional(),
+  type: z.string().optional(),
   city: z.string().optional(),
   neighborhood: z.string().optional(),
   financing: z.boolean().optional(),

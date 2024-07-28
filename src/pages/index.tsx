@@ -4,11 +4,53 @@ import DefaultButton from '@/components/defaultButton';
 import DefaultRangeSlider from '@/components/defaultRangeSlider';
 import DefaultTextInput from '@/components/defaultTextInput';
 import { defaultColors } from '@/constants/styles/defaultColors';
+import {
+  defaultFiltersSchema,
+  TypeFormData,
+} from '@/schemas/defaultFiltersSchema';
+import { priceMask } from '@/utils/priceMask';
 import { randomPicture } from '@/utils/randomPicture';
-import { AbsoluteCenter, Box, Checkbox, Divider, Image, Link, SimpleGrid } from '@chakra-ui/react';
+import {
+  AbsoluteCenter,
+  Box,
+  Checkbox,
+  Divider,
+  Image,
+  Link,
+  SimpleGrid,
+} from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbHomeDollar } from 'react-icons/tb';
 
 export default function Home() {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<TypeFormData>({ resolver: zodResolver(defaultFiltersSchema) });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: 'minPrice' | 'maxPrice'
+  ) => {
+    const rawValue = e.target.value.replace(/\./g, '');
+    const formattedValue = priceMask(rawValue);
+    setValue(field, formattedValue);
+  };
+
+  const onSubmit: SubmitHandler<TypeFormData> = (data) => {
+    const formattedData = {
+      ...data,
+      minPrice: data.minPrice?.replace(/,/g, '') ?? '',
+      maxPrice: data.maxPrice?.replace(/,/g, '') ?? '',
+    };
+    console.log(formattedData);
+  };
+
+  console.log(errors);
+
   return (
     <div className="flex flex-col w-full h-full">
       <div className="w-full h-[650px] mb-[400px]">
@@ -39,35 +81,74 @@ export default function Home() {
             OU
           </AbsoluteCenter>
         </Box>
-        <SimpleGrid
-          className="w-full mt-4"
-          columns={3}
-          spacingY={10}
-          spacingX={3}
-        >
-          <DefaultSelect options={[]} placeholder="Tipo de Imóvel" />
-          <DefaultSelect options={[]} placeholder="Cidade" />
-          <DefaultSelect options={[]} placeholder="Bairro" />
-          <div>
-            <span className="font-medium text-lg">
-              Selecione a faixa de Preço
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <SimpleGrid
+            className="w-full mt-4"
+            columns={3}
+            spacingY={10}
+            spacingX={3}
+          >
+            <DefaultSelect
+              options={[]}
+              placeholder="Tipo de Imóvel"
+              register={{ ...register('type') }}
+            />
+            <DefaultSelect
+              options={[]}
+              placeholder="Cidade"
+              register={{ ...register('city') }}
+            />
+            <DefaultSelect
+              options={[]}
+              placeholder="Bairro"
+              register={{ ...register('neighborhood') }}
+            />
+            <div>
+              <span className="font-medium text-lg">
+                Selecione a faixa de Preço
+              </span>
+              <div className="flex justify-center items-center gap-4">
+                <DefaultTextInput
+                  placeholder="Min."
+                  register={{
+                    ...register('minPrice', {
+                      onChange: (e) => handleInputChange(e, 'minPrice'),
+                    }),
+                  }}
+                />
+                <DefaultTextInput
+                  placeholder="Max."
+                  register={{
+                    ...register('maxPrice', {
+                      onChange: (e) => handleInputChange(e, 'maxPrice'),
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col items-center w-full h-28">
+              <div className="flex justify-center items-center  w-full h-full">
+                {/* <span className="font-medium text-lg">Apenas Financiavéis?</span> */}
+                <Checkbox
+                  size="lg"
+                  colorScheme="green"
+                  defaultChecked={false}
+                  {...register('financing')}
+                >
+                  Apenas Financiavéis?
+                </Checkbox>
+              </div>
+            </div>
+            <span className="pt-6 w-full h-full">
+              <DefaultButton
+                buttonType="submit"
+                text="Buscar Imóvel"
+                isSearchButton
+                maxWidth={300}
+              />
             </span>
-            <div className="flex flex-col justify-center items-center w-full h-28 pl-4 pr-10">
-              <DefaultRangeSlider />
-            </div>
-          </div>
-          <div className="flex flex-col items-center w-full h-28">
-            <div className="flex justify-center items-center  w-full h-full">
-              {/* <span className="font-medium text-lg">Apenas Financiavéis?</span> */}
-              <Checkbox size="lg" colorScheme="green" defaultChecked={false}>
-                Apenas Financiavéis?
-              </Checkbox>
-            </div>
-          </div>
-          <span className="pt-6 w-full h-full">
-            <DefaultButton text="Buscar Imóvel" isSearchButton maxWidth={300} />
-          </span>
-        </SimpleGrid>
+          </SimpleGrid>
+        </form>
       </div>
       <div className="flex flex-col w-full h-full items-center mt-10">
         <span className="flex justify-center items-center gap-2 text-zinc-600 font-medium text-3xl border-b-2 border-zinc-600 pb-2 px-4">
@@ -85,7 +166,12 @@ export default function Home() {
           <CardProperties imageSrc="/images/casa3.jpg" />
           <CardProperties imageSrc="/images/casa1.jpg" />
         </SimpleGrid>
-        <Link href='/imoveis' className='text-orange-600 font-medium text-xl pt-16' >Ver todos os imóveis</Link>
+        <Link
+          href="/imoveis"
+          className="text-orange-600 font-medium text-xl pt-16"
+        >
+          Ver todos os imóveis
+        </Link>
       </div>
     </div>
   );
