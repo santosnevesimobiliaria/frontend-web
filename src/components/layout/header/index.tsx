@@ -56,13 +56,13 @@ function Header() {
     console.log(formattedData);
   };
 
-  console.log(errors);
+  // console.log(errors);
 
   return (
     <>
       <SimpleGrid
         columns={3}
-        className="h-16 bg-[#FBFBFA] text-white font-medium"
+        className="h-16 bg-orange-600 text-white font-medium"
       >
         <Flex
           w={'100%'}
@@ -78,7 +78,7 @@ function Header() {
             <Text
               onClick={() => window.open(navItem.link, '_blank')}
               cursor={'pointer'}
-              className="text-lg font-medium text-orange-600 hover:text-[#580CEA]"
+              className="text-lg font-medium text-white hover:text-[#580CEA]"
             >
               {navItem.title}
             </Text>
@@ -88,9 +88,9 @@ function Header() {
           <DefaultButton
             onClinkFunc={onOpen}
             text="Buscar Imóvel"
-            orangeSchema
             maxWidth={200}
             isSearchButton
+            orangeSchema
           />
         </Flex>
       </SimpleGrid>
