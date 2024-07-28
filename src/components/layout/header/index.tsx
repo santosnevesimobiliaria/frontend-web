@@ -62,7 +62,7 @@ function Header() {
     <>
       <SimpleGrid
         columns={3}
-        className="h-16 bg-orange-600 text-white font-medium"
+        className="h-16 bg-white text-orange-600 font-medium"
       >
         <Flex
           w={'100%'}
@@ -78,7 +78,7 @@ function Header() {
             <Text
               onClick={() => window.open(navItem.link, '_blank')}
               cursor={'pointer'}
-              className="text-lg font-medium text-white hover:text-[#580CEA]"
+              className="text-lg font-medium text-orange-600 hover:text-[#580CEA]"
             >
               {navItem.title}
             </Text>
@@ -130,7 +130,7 @@ function Header() {
                   className="font-medium text-lg text-zinc-600"
                   {...register('financing')}
                 >
-                  Apenas Financiavéis?
+                  Apenas Financiavéis
                 </Checkbox>
 
                 <div className="flex flex-col gap-10  w-full h-28">

@@ -8,14 +8,12 @@ export const defaultFiltersSchema = z.object({
   minPrice: z
     .string()
     .transform((value) => {
-      // Formatar o número com vírgulas
       return value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     })
     .optional(),
   maxPrice: z
     .string()
     .transform((value) => {
-      // Formatar o número com vírgulas
       return value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     })
     .optional(),

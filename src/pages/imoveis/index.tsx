@@ -15,6 +15,7 @@ import {
 } from '@/schemas/defaultFiltersSchema';
 import { useEffect } from 'react';
 import { priceMask } from '@/utils/priceMask';
+import PageHeader from '@/components/pageHeader';
 
 function Imoveis() {
   const {
@@ -45,11 +46,8 @@ function Imoveis() {
   };  
 
   return (
-    <div className="flex flex-col w-full h-full pt-12">
-      <span className="flex m-auto mb-12 w-fit justify-center items-center gap-2 text-zinc-600 font-medium text-3xl border-b-2 border-zinc-600 pb-2 px-4">
-        <TbHomeDollar />
-        <span>Imóveis a venda</span>
-      </span>
+    <div className="flex flex-col w-full h-full">
+      <PageHeader title="Imóveis a venda" />
       <div className="flex w-full h-full">
         <div className="fixed left-0 flex flex-col w-full max-w-[250px] shadow-lg bg-white rounded-r-lg overflow-x-hidden">
           <span className="flex justify-center items-center font-medium text-zinc-600 bg-gray-300 w-full h-10">
@@ -80,7 +78,7 @@ function Imoveis() {
                 className="font-medium text-lg text-zinc-600"
                 {...register('financing')}
               >
-                Apenas Financiavéis?
+                Apenas Financiavéis
               </Checkbox>
 
               <div className="flex flex-col gap-4  w-full h-28">

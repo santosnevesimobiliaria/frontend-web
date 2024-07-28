@@ -135,7 +135,7 @@ export default function Home() {
                   defaultChecked={false}
                   {...register('financing')}
                 >
-                  Apenas Financiavéis?
+                  Apenas Financiavéis
                 </Checkbox>
               </div>
             </div>
