@@ -68,7 +68,11 @@ function Imoveis() {
                 placeholder="Cidade"
                 register={{ ...register('city') }}
               />
-              <DefaultSelect options={[]} placeholder="Bairro" />
+              <DefaultSelect
+                options={[]}
+                placeholder="Bairro"
+                register={{ ...register('neighborhood') }}
+              />
 
               <Checkbox
                 size="lg"

@@ -1,9 +1,15 @@
 import DefaultSelect from '@/components/deafultSelect';
 import DefaultButton from '@/components/defaultButton';
 import DefaultRangeSlider from '@/components/defaultRangeSlider';
+import DefaultTextInput from '@/components/defaultTextInput';
 import { navbarItems } from '@/constants/layout/navBarItems';
 import { defaultColors } from '@/constants/styles/defaultColors';
+import {
+  defaultFiltersSchema,
+  TypeFormData,
+} from '@/schemas/defaultFiltersSchema';
 import { NavbarItemsConfig } from '@/types/constants/navbarItemsInterface';
+import { priceMask } from '@/utils/priceMask';
 import {
   Checkbox,
   Drawer,
@@ -18,10 +24,39 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<TypeFormData>({ resolver: zodResolver(defaultFiltersSchema) });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: 'minPrice' | 'maxPrice'
+  ) => {
+    const rawValue = e.target.value.replace(/\./g, '');
+    const formattedValue = priceMask(rawValue);
+    setValue(field, formattedValue);
+  };
+
+  const onSubmit: SubmitHandler<TypeFormData> = (data) => {
+    const formattedData = {
+      ...data,
+      minPrice: data.minPrice?.replace(/,/g, '') ?? '',
+      maxPrice: data.maxPrice?.replace(/,/g, '') ?? '',
+    };
+    console.log(formattedData);
+  };
+
+  console.log(errors);
 
   return (
     <>
@@ -71,30 +106,58 @@ function Header() {
           </DrawerHeader>
 
           <DrawerBody>
-            <div className="flex flex-col w-full h-full gap-10 pt-6">
-              <DefaultSelect options={[]} placeholder="Tipo de Imóvel" />
-              <DefaultSelect options={[]} placeholder="Cidade" />
-              <DefaultSelect options={[]} placeholder="Bairro" />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex flex-col w-full h-full gap-10 pt-6">
+                <DefaultSelect
+                  options={[]}
+                  placeholder="Tipo de Imóvel"
+                  register={{ ...register('type') }}
+                />
+                <DefaultSelect
+                  options={[]}
+                  placeholder="Cidade"
+                  register={{ ...register('city') }}
+                />
+                <DefaultSelect
+                  options={[]}
+                  placeholder="Bairro"
+                  register={{ ...register('neighborhood') }}
+                />
 
-              <Checkbox
-                size="lg"
-                colorScheme="green"
-                className="font-medium text-lg text-zinc-600"
-              >
-                Apenas Financiavéis?
-              </Checkbox>
+                <Checkbox
+                  size="lg"
+                  colorScheme="green"
+                  className="font-medium text-lg text-zinc-600"
+                  {...register('financing')}
+                >
+                  Apenas Financiavéis?
+                </Checkbox>
 
-              <div className="flex flex-col gap-10  w-full h-28">
-                <span className="font-medium text-lg text-zinc-600">
-                  Selecione a faixa de Preço
-                </span>
-                <div className="flex flex-col justify-center items-center w-[80%] pl-6">
-                  <DefaultRangeSlider
-                    sliderCustomColor={defaultColors.purple}
-                  />
+                <div className="flex flex-col gap-10  w-full h-28">
+                  <span className="font-medium text-lg text-zinc-600">
+                    Selecione a faixa de Preço
+                  </span>
+                  <div className="flex justify-center items-center gap-4">
+                    <DefaultTextInput
+                      placeholder="Min."
+                      register={{
+                        ...register('minPrice', {
+                          onChange: (e) => handleInputChange(e, 'minPrice'),
+                        }),
+                      }}
+                    />
+                    <DefaultTextInput
+                      placeholder="Max."
+                      register={{
+                        ...register('maxPrice', {
+                          onChange: (e) => handleInputChange(e, 'maxPrice'),
+                        }),
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </form>
           </DrawerBody>
 
           <DrawerFooter>
@@ -109,6 +172,7 @@ function Header() {
                 orangeSchema
                 maxWidth={200}
                 isSearchButton
+                onClinkFunc={handleSubmit(onSubmit)}
               />
             </div>
           </DrawerFooter>
