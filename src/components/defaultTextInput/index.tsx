@@ -25,9 +25,10 @@ type InputTypes =
   | 'week';
 
 interface IDefaultTextInput {
-  inputType?: InputTypes, 
+  inputType?: InputTypes;
   placeholder?: string;
   maxWidth?: number;
+  maxLength?: number;
   register?: any;
 }
 
@@ -35,11 +36,13 @@ function DefaultTextInput({
   inputType,
   placeholder,
   maxWidth,
+  maxLength,
   register,
 }: IDefaultTextInput) {
   return (
     <Input
       type={inputType ?? 'text'}
+      maxLength={maxLength}
       className="w-full h-10 rounded-lg pl-4 text-zinc-600 outline-none placeholder:text-zinc-600 bg-white"
       maxWidth={maxWidth}
       placeholder={placeholder}
