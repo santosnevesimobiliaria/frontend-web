@@ -49,7 +49,7 @@ function Imoveis() {
     <div className="flex flex-col w-full h-full">
       <PageHeader title="Imóveis a venda" />
       <div className="flex w-full h-full">
-        <div className="fixed left-0 flex flex-col w-full max-w-[250px] shadow-lg bg-white rounded-r-lg overflow-x-hidden">
+        <div className="flex flex-col w-full max-w-[250px] h-fit shadow-lg bg-white rounded-r-lg overflow-x-hidden">
           <span className="flex justify-center items-center font-medium text-zinc-600 bg-gray-300 w-full h-10">
             Buscar por Categorias
           </span>
@@ -113,8 +113,7 @@ function Imoveis() {
             </div>
           </form>
         </div>
-        <div className="w-full max-w-[250px]"></div>
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full h-full max-h-[1000px] overflow-y-scroll">
           <SimpleGrid className="w-full" columns={4} spacingY={10} spacingX={3}>
             <CardProperties imageSrc="/images/casa1.jpg" />
             <CardProperties imageSrc="/images/casa2.jpg" />

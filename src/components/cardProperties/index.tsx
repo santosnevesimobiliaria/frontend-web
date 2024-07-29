@@ -11,20 +11,29 @@ interface IPropsCardProperties {
 
 function CardProperties({ imageSrc }: IPropsCardProperties) {
   const iconSize = 16;
-  // const classBodyText = 
+
+  const redirect = (code: number) => {
+    window.open(`/imoveis/${code}`, '_blank')
+  }
 
   return (
-    <div className="flex flex-col h-[800px] w-[370px] m-auto rounded-lg overflow-hidden shadow-lg text-zinc-600 relative">
-      <span className="flex justify-center items-center absolute top-4 left-4 w-[100px] h-[30px] bg-orange-600 text-white font-medium rounded-md">
+    <div
+      onClick={() => redirect(200)}
+      className="flex flex-col h-[800px] w-[370px] m-auto rounded-lg overflow-hidden shadow-lg text-zinc-600 relative cursor-pointer"
+    >
+      <span className="flex justify-center items-center absolute top-4 left-4 w-[100px] h-[30px] bg-orange-600 text-white font-medium rounded-md z-50">
         Cód: 200
       </span>
-      <div className="w-full min-h-[350px]">
+      <div className="w-full min-h-[350px] overflow-hidden">
         <Image
           src={imageSrc}
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: 'cover', transition: 'transform 0.5s ease' }}
           width={'100%'}
           height={'100%'}
           alt="Imóvel a venda"
+          _hover={{
+            transform: 'scale(1.1)',
+          }}
         />
       </div>
       <div className="flex flex-col w-full h-full p-6">
