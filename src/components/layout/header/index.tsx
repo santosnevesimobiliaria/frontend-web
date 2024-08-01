@@ -23,13 +23,17 @@ import {
   SimpleGrid,
   Text,
   useDisclosure,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 function Header() {
+  const [isLargerThan1024] = useMediaQuery('(min-width: 1024px)');
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const template = isLargerThan1024 ? '20% 1fr 20%' : '30% 1fr 40%';
 
   const {
     register,
@@ -61,11 +65,13 @@ function Header() {
   return (
     <>
       <SimpleGrid
+        templateColumns={template}
         columns={3}
         className="h-16 bg-white text-orange-600 font-medium"
       >
         <Flex
           w={'100%'}
+          maxW={'200px'}
           justifyContent={'center'}
           alignItems={'center'}
           color={'orange'}
@@ -73,18 +79,32 @@ function Header() {
           {/* <Image w={100} h={100} src={'images/logo.png'} alt="Logo SantosNeves" /> */}
           LOGO
         </Flex>
-        <Flex alignItems={'center'} gap={50}>
-          {navbarItems.map((navItem: NavbarItemsConfig) => (
-            <Text
-              onClick={() => window.open(navItem.link, '_blank')}
-              cursor={'pointer'}
-              className="text-lg font-medium text-orange-600 hover:text-[#580CEA]"
-            >
-              {navItem.title}
-            </Text>
-          ))}
-        </Flex>
-        <Flex w={'100%'} justifyContent={'center'} alignItems={'center'}>
+        {isLargerThan1024 ? (
+          <Flex
+            justifyContent={'center'}
+            w={'100%'}
+            alignItems={'center'}
+            gap={50}
+          >
+            {navbarItems.map((navItem: NavbarItemsConfig) => (
+              <Text
+                onClick={() => window.open(navItem.link, '_blank')}
+                cursor={'pointer'}
+                className="text-lg font-medium text-orange-600 hover:text-[#580CEA] text-nowrap"
+              >
+                {navItem.title}
+              </Text>
+            ))}
+          </Flex>
+        ) : (
+          <span></span>
+        )}
+        <Flex
+          w={'100%'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          pr={isLargerThan1024 ? 0 : 4}
+        >
           <DefaultButton
             onClinkFunc={onOpen}
             text="Buscar Imóvel"

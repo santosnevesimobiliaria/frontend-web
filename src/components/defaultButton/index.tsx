@@ -6,7 +6,7 @@ type ButtonType = 'submit' | 'reset' | 'button';
 interface IDefaultButton {
   text: string;
   buttonType?: ButtonType;
-  maxWidth?: number;
+  maxWidth?: number | 'unset';
   orangeSchema?: boolean;
   onClinkFunc?: () => any;
   colorScheme?: string;
@@ -30,7 +30,7 @@ function DefaultButton({
       onClick={onClinkFunc}
       className={`w-full h-10 ${
         orangeSchema ? 'bg-orange-600 text-white' : 'bg-white text-orange-600'
-      } rounded-lg text-sm font-medium hover:bg-[#580CEA] hover:text-white transition duration-300 ease-in-out transform`}
+      } rounded-lg text-sm font-medium hover:bg-[#580CEA] hover:text-white transition duration-300 ease-in-out transform px-4`}
       maxWidth={maxWidth}
       leftIcon={isSearchButton ? <Search2Icon /> : <></>}
     >

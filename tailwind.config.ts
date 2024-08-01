@@ -7,7 +7,15 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/layout/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  theme: {},
+  theme: {
+    screens: {
+      sm: '640px', // Small screens (phones)
+      md: '768px', // Medium screens (tablets)
+      lg: '1024px', // Large screens (desktops)
+      xl: '1280px', // Extra large screens (large desktops)
+      '2xl': '1536px', // 2X large screens
+    },
+  },
   plugins: [],
 };
 export default config;

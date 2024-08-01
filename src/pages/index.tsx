@@ -18,12 +18,15 @@ import {
   Image,
   Link,
   SimpleGrid,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbHomeDollar } from 'react-icons/tb';
 
 export default function Home() {
+  const [isLargerThan768] = useMediaQuery('(min-width: 768px)');
+
   const {
     register,
     handleSubmit,
@@ -53,7 +56,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="w-full h-[650px] mb-[400px]">
+      <div className="w-full h-[650px] mb-[700px] md:mb-[400px] lg:mb-[400px]">
         <Image
           src={randomPicture()}
           style={{ objectFit: 'cover' }}
@@ -63,16 +66,16 @@ export default function Home() {
         />
       </div>
 
-      <div className="absolute top-[550px] left-[50%] transform -translate-x-1/2 flex flex-col mx-auto items-center py-3 px-4 w-full max-w-[50%] h-[500px] bg-orange-600 text-[#FBFBFA] rounded-lg">
+      <div className="absolute top-[550px] left-[50%] transform -translate-x-1/2 flex flex-col mx-auto items-center py-3 px-4 w-full h-fit lg:max-w-[950px] lg:h-[500px] bg-orange-600 text-[#FBFBFA] rounded-lg">
         <span className="text-3xl font-medium mt-4">
           Encontre o Imóvel dos seus sonhos
         </span>
-        <span className="flex justify-between w-full py-4 mt-10">
-          <DefaultTextInput placeholder="Código do Imóvel" maxWidth={609} />
+        <span className="flex flex-col gap-4 justify-between w-full py-4 mt-10 md:flex-row">
+          <DefaultTextInput placeholder="Código do Imóvel" />
           <DefaultButton
             text="Buscar pelo código do Imóvel"
             isSearchButton
-            maxWidth={300}
+            maxWidth={isLargerThan768 ? 300 : 'unset'}
           />
         </span>
         <Box position="relative" padding="10" w={'full'}>
@@ -84,7 +87,7 @@ export default function Home() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <SimpleGrid
             className="w-full mt-4"
-            columns={3}
+            columns={{ sm: 1, md: 2, lg: 3, xl: 3 }}
             spacingY={10}
             spacingX={3}
           >
@@ -126,8 +129,8 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="flex flex-col items-center w-full h-28">
-              <div className="flex justify-center items-center  w-full h-full">
+            <div className="flex flex-col items-center w-full lg:h-28">
+              <div className="flex  items-center  w-full h-full md:justify-center">
                 {/* <span className="font-medium text-lg">Apenas Financiavéis?</span> */}
                 <Checkbox
                   size="lg"
@@ -139,12 +142,12 @@ export default function Home() {
                 </Checkbox>
               </div>
             </div>
-            <span className="pt-6 w-full h-full">
+            <span className="flex justify-end pt-6 w-full h-full">
               <DefaultButton
                 buttonType="submit"
                 text="Buscar Imóvel"
                 isSearchButton
-                maxWidth={300}
+                maxWidth={isLargerThan768 ? 300 : 'unset'}
               />
             </span>
           </SimpleGrid>
@@ -156,8 +159,8 @@ export default function Home() {
           <span>Imóveis em Destaque</span>
         </span>
         <SimpleGrid
-          className="w-full mt-10"
-          columns={4}
+          className="w-full mt-10 px-4"
+          columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
           spacingY={10}
           spacingX={3}
         >

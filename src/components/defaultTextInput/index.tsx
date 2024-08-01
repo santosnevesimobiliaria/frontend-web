@@ -27,7 +27,7 @@ type InputTypes =
 interface IDefaultTextInput {
   inputType?: InputTypes;
   placeholder?: string;
-  maxWidth?: number;
+  maxWidth?: number | 'unset';
   maxLength?: number;
   register?: any;
 }

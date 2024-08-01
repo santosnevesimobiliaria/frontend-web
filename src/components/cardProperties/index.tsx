@@ -19,7 +19,7 @@ function CardProperties({ imageSrc }: IPropsCardProperties) {
   return (
     <div
       onClick={() => redirect(200)}
-      className="flex flex-col h-[800px] w-[370px] m-auto rounded-lg overflow-hidden shadow-lg text-zinc-600 relative cursor-pointer"
+      className="flex flex-col h-[800px]  w-full max-w-[370px] m-auto rounded-lg overflow-hidden shadow-lg text-zinc-600 relative cursor-pointer"
     >
       <span className="flex justify-center items-center absolute top-4 left-4 w-[100px] h-[30px] bg-orange-600 text-white font-medium rounded-md z-50">
         Cód: 200
@@ -36,7 +36,7 @@ function CardProperties({ imageSrc }: IPropsCardProperties) {
           }}
         />
       </div>
-      <div className="flex flex-col w-full h-full p-6">
+      <div className="flex flex-col w-full h-full p-2">
         <span className="text-2xl font-medium">Casa</span>
         <div className="flex flex-col w-full mt-6">
           <span className="flex items-center gap-2">
@@ -69,7 +69,7 @@ function CardProperties({ imageSrc }: IPropsCardProperties) {
             </span>
           </SimpleGrid>
           <SimpleGrid columns={3} className="mt-6">
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-2 text-nowrap">
               <IconFrame icon={<FaBed size={iconSize} />} />
               <div className="flex flex-col justify-center items-center">
                 <span className="text-zinc-600 font-medium text-xs">
@@ -78,7 +78,7 @@ function CardProperties({ imageSrc }: IPropsCardProperties) {
                 <span className="text-xs">Área Util</span>
               </div>
             </span>
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-2 text-nowrap">
               <IconFrame icon={<FaBed size={iconSize} />} />
               <div className="flex flex-col justify-center items-center">
                 <span className="text-zinc-600 font-medium text-xs">
