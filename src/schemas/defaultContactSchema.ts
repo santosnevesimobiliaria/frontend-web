@@ -5,7 +5,7 @@ export const defaultContactSchema = z.object({
   name: z.string().min(3, { message: 'Nome é obrigatório' }),
   phone: z
     .string()
-    .min(10, { message: 'Telefone Inválido' }),
+    .min(14, { message: 'Telefone Inválido' }),
   interest: z.nativeEnum(InterestEnum, {
     errorMap: (issue, _ctx) => {
       return { message: 'Campo obrigatório' };
