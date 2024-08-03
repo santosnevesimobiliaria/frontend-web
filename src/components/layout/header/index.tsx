@@ -1,17 +1,9 @@
-import DefaultSelect from '@/components/deafultSelect';
 import DefaultButton from '@/components/defaultButton';
-import DefaultRangeSlider from '@/components/defaultRangeSlider';
-import DefaultTextInput from '@/components/defaultTextInput';
+import FilterDrawer from '@/components/filtersDrawer';
 import { navbarItems } from '@/constants/layout/navBarItems';
-import { defaultColors } from '@/constants/styles/defaultColors';
-import {
-  defaultFiltersSchema,
-  TypeFormData,
-} from '@/schemas/defaultFiltersSchema';
 import { NavbarItemsConfig } from '@/types/constants/navbarItemsInterface';
-import { priceMask } from '@/utils/priceMask';
 import {
-  Checkbox,
+  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -25,40 +17,20 @@ import {
   useDisclosure,
   useMediaQuery,
 } from '@chakra-ui/react';
-import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { FaBars } from 'react-icons/fa';
 
 function Header() {
   const [isLargerThan1024] = useMediaQuery('(min-width: 1024px)');
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenAsideMenu,
+    onOpen: onOpenAsideMenus,
+    onClose: onCloseAsideMenu,
+  } = useDisclosure();
 
   const template = isLargerThan1024 ? '20% 1fr 20%' : '30% 1fr 40%';
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<TypeFormData>({ resolver: zodResolver(defaultFiltersSchema) });
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: 'minPrice' | 'maxPrice'
-  ) => {
-    const rawValue = e.target.value.replace(/\./g, '');
-    const formattedValue = priceMask(rawValue);
-    setValue(field, formattedValue);
-  };
-
-  const onSubmit: SubmitHandler<TypeFormData> = (data) => {
-    const formattedData = {
-      ...data,
-      minPrice: data.minPrice?.replace(/,/g, '') ?? '',
-      maxPrice: data.maxPrice?.replace(/,/g, '') ?? '',
-    };
-    console.log(formattedData);
-  };
 
   // console.log(errors);
 
@@ -69,16 +41,25 @@ function Header() {
         columns={3}
         className="h-16 bg-white text-orange-600 font-medium"
       >
-        <Flex
-          w={'100%'}
-          maxW={'200px'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          color={'orange'}
-        >
-          {/* <Image w={100} h={100} src={'images/logo.png'} alt="Logo SantosNeves" /> */}
-          LOGO
-        </Flex>
+        {isLargerThan1024 ? (
+          <Flex
+            w={'100%'}
+            maxW={'200px'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            color={'orange'}
+          >
+            {/* <Image w={100} h={100} src={'images/logo.png'} alt="Logo SantosNeves" /> */}
+            LOGO
+          </Flex>
+        ) : (
+          <Button
+            onClick={onOpenAsideMenus}
+            className="flex w-14 h-10 rounded-lg text-white bg-orange-600 my-auto ml-4"
+          >
+            <FaBars size={22} />
+          </Button>
+        )}
         {isLargerThan1024 ? (
           <Flex
             justifyContent={'center'}
@@ -101,9 +82,9 @@ function Header() {
         )}
         <Flex
           w={'100%'}
-          justifyContent={'center'}
+          justifyContent={'flex-end'}
           alignItems={'center'}
-          pr={isLargerThan1024 ? 0 : 4}
+          pr={isLargerThan1024 ? 8 : 4}
         >
           <DefaultButton
             onClinkFunc={onOpen}
@@ -114,88 +95,48 @@ function Header() {
           />
         </Flex>
       </SimpleGrid>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={'md'}>
+      <FilterDrawer isOpen={isOpen} onClose={onClose} />
+      <Drawer
+        isOpen={isOpenAsideMenu}
+        placement="left"
+        onClose={onCloseAsideMenu}
+      >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-
           <DrawerHeader>
-            <span className="text-orange-600">
-              Encontre o Imóvel dos seus sonhos
-            </span>
+            <Flex
+              w={'100%'}
+              maxW={'200px'}
+              justifyContent={'flex-start'}
+              alignItems={'center'}
+              color={'orange'}
+            >
+              {/* <Image w={100} h={100} src={'images/logo.png'} alt="Logo SantosNeves" /> */}
+              LOGO
+            </Flex>
           </DrawerHeader>
 
           <DrawerBody>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex flex-col w-full h-full gap-10 pt-6">
-                <DefaultSelect
-                  options={[]}
-                  placeholder="Tipo de Imóvel"
-                  register={{ ...register('type') }}
-                />
-                <DefaultSelect
-                  options={[]}
-                  placeholder="Cidade"
-                  register={{ ...register('city') }}
-                />
-                <DefaultSelect
-                  options={[]}
-                  placeholder="Bairro"
-                  register={{ ...register('neighborhood') }}
-                />
-
-                <Checkbox
-                  size="lg"
-                  colorScheme="green"
-                  className="font-medium text-lg text-zinc-600"
-                  {...register('financing')}
+            <div className="flex flex-col w-full h-full gap-4">
+              {navbarItems.map((navItem: NavbarItemsConfig) => (
+                <Text
+                  onClick={() => window.open(navItem.link, '_blank')}
+                  cursor={'pointer'}
+                  className="text-lg font-medium text-orange-600 hover:text-[#580CEA] text-nowrap"
                 >
-                  Apenas Financiavéis
-                </Checkbox>
-
-                <div className="flex flex-col gap-10  w-full h-28">
-                  <span className="font-medium text-lg text-zinc-600">
-                    Selecione a faixa de Preço
-                  </span>
-                  <div className="flex justify-center items-center gap-4">
-                    <DefaultTextInput
-                      placeholder="Min."
-                      register={{
-                        ...register('minPrice', {
-                          onChange: (e) => handleInputChange(e, 'minPrice'),
-                        }),
-                      }}
-                    />
-                    <DefaultTextInput
-                      placeholder="Max."
-                      register={{
-                        ...register('maxPrice', {
-                          onChange: (e) => handleInputChange(e, 'maxPrice'),
-                        }),
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </form>
+                  {navItem.title}
+                </Text>
+              ))}
+            </div>
           </DrawerBody>
 
-          <DrawerFooter>
-            <div className="flex w-full justify-around items-center">
-              <DefaultButton
-                text="Cancelar"
-                maxWidth={200}
-                onClinkFunc={onClose}
-              />
-              <DefaultButton
-                text="Buscar Imóvel"
-                orangeSchema
-                maxWidth={200}
-                isSearchButton
-                onClinkFunc={handleSubmit(onSubmit)}
-              />
-            </div>
-          </DrawerFooter>
+          {/* <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue">Save</Button>
+          </DrawerFooter> */}
         </DrawerContent>
       </Drawer>
     </>
