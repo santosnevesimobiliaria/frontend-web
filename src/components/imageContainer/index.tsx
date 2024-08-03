@@ -4,15 +4,18 @@ interface IImageContainer {
   src: string;
   sizeClassname: string;
   showMoreImagesNumbers?: number;
+  onClick: () => void;
 }
 
 function ImageContainer({
   src,
   sizeClassname,
   showMoreImagesNumbers,
+  onClick
 }: IImageContainer) {
   return (
     <div
+      onClick={onClick}
       className={`relative w-full overflow-hidden ${sizeClassname} cursor-pointer`}
     >
       <Image

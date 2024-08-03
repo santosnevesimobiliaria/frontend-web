@@ -1,9 +1,9 @@
-import DefaultButton from "@/components/defaultButton";
-import ImageSliderShow from "@/components/imageSliderShow";
-import PageHeader from "@/components/pageHeader";
+import DefaultButton from '@/components/defaultButton';
+import ImageSliderShow from '@/components/imageSliderShow';
+import PageHeader from '@/components/pageHeader';
 import { FaWhatsapp } from 'react-icons/fa';
 
-function ImovelView () {
+function ImovelView() {
   return (
     <div className="flex flex-col w-full h-full text-zinc-600">
       <PageHeader title="Titulo imovel" />
