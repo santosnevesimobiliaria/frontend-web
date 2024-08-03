@@ -12,6 +12,7 @@ interface IDefaultButton {
   colorScheme?: string;
   isLoading?: boolean;
   isSearchButton?: boolean;
+  leftIcon?: any;
 }
 
 function DefaultButton({
@@ -23,7 +24,16 @@ function DefaultButton({
   isLoading,
   isSearchButton,
   colorScheme,
+  leftIcon
 }: IDefaultButton) {
+  const leftIconConfig = leftIcon ? (
+    leftIcon
+  ) : isSearchButton ? (
+    <Search2Icon />
+  ) : (
+    <></>
+  );
+
   return (
     <Button
       type={buttonType ?? 'button'}
@@ -32,7 +42,7 @@ function DefaultButton({
         orangeSchema ? 'bg-orange-600 text-white' : 'bg-white text-orange-600'
       } rounded-lg text-sm font-medium hover:bg-[#580CEA] hover:text-white transition duration-300 ease-in-out transform px-4`}
       maxWidth={maxWidth}
-      leftIcon={isSearchButton ? <Search2Icon /> : <></>}
+      leftIcon={leftIconConfig}
     >
       {text}
     </Button>
