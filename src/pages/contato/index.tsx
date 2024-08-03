@@ -127,11 +127,11 @@ function Contato() {
               />
               <span
                 className={`flex justify-end w-full text-xs ${
-                  message.length === messageCharLimit &&
+                  message?.length === messageCharLimit &&
                   'text-red-700 text-base'
                 }`}
               >
-                {message.length}/{messageCharLimit}
+                {message?.length ?? 0}/{messageCharLimit}
               </span>
               <FormErrorMessage>
                 {errors.message && errors.message.message}

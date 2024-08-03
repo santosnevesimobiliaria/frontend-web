@@ -1,16 +1,22 @@
 import { randomPicture } from "@/utils/randomPicture";
 import { Image } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 interface IPageHeaderProps {
   title: string;
 }
 
 function PageHeader({ title }: IPageHeaderProps) {
+  const [imageSrc, setImageSrc] = useState<string>('');
+
+  useEffect(() => {
+    setImageSrc(randomPicture())
+  }, []);
   return (
     <div className="relative">
       <div className="w-full h-[350px] mb-12">
         <Image
-          src={randomPicture()}
+          src={imageSrc}
           style={{ objectFit: 'cover', filter: 'grayscale(100%)' }}
           width={'100%'}
           height={'100%'}
