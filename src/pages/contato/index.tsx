@@ -27,8 +27,6 @@ function Contato() {
   const router = useRouter();
   const { sell } = router.query;
 
-  console.log(!!sell);
-
   const {
     register,
     handleSubmit,
@@ -126,7 +124,7 @@ function Contato() {
                 {errors.message && errors.message.message}
               </FormErrorMessage>
             </FormControl>
-            <span className="flex justify-end w-full">
+            <span className="flex justify-start w-full md:justify-end">
               <DefaultButton
                 buttonType="submit"
                 text="Enviar Mensagem"
