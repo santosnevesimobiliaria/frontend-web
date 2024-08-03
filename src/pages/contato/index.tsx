@@ -23,6 +23,8 @@ import { IoLogoInstagram } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
+const messageCharLimit = 256;
+
 function Contato() {
   const router = useRouter();
   const { sell } = router.query;
@@ -31,8 +33,10 @@ function Contato() {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<TypeFormData>({ resolver: zodResolver(defaultContactSchema) });
+  const message = watch('message');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/\./g, '');
@@ -57,10 +61,10 @@ function Contato() {
   }
 
   useEffect(() => {
-    if(!!sell){
-      setValue('interest', InterestEnum.sell)
+    if (!!sell) {
+      setValue('interest', InterestEnum.sell);
     }
-  }, [sell])
+  }, [sell]);
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -117,9 +121,18 @@ function Contato() {
               <Textarea
                 placeholder="Sua mensagem"
                 className="bg-white"
-                maxLength={256}
+                maxLength={messageCharLimit}
+                resize={'none'}
                 {...register('message')}
               />
+              <span
+                className={`flex justify-end w-full text-xs ${
+                  message.length === messageCharLimit &&
+                  'text-red-700 text-base'
+                }`}
+              >
+                {message.length}/{messageCharLimit}
+              </span>
               <FormErrorMessage>
                 {errors.message && errors.message.message}
               </FormErrorMessage>
