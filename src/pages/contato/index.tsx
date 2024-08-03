@@ -20,8 +20,15 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { LuPhoneCall } from 'react-icons/lu';
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoLogoInstagram } from 'react-icons/io5';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 function Contato() {
+  const router = useRouter();
+  const { sell } = router.query;
+
+  console.log(!!sell);
+
   const {
     register,
     handleSubmit,
@@ -50,6 +57,12 @@ function Contato() {
     var uri = 'tel:' + encodeURIComponent(phoneNumber);
     window.location.href = uri;
   }
+
+  useEffect(() => {
+    if(!!sell){
+      setValue('interest', InterestEnum.sell)
+    }
+  }, [sell])
 
   return (
     <div className="flex flex-col w-full h-full">

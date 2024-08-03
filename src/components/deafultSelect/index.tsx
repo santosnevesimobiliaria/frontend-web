@@ -9,13 +9,15 @@ interface IDefaultSelect {
   placeholder: string;
   options: IOptions[];
   maxWidth?: number;
-  register?: any
+  register?: any;
+  defaultValue?: any;
 }
 
 function DefaultSelect({
   placeholder,
   options,
   register,
+  defaultValue,
   ...props
 }: IDefaultSelect) {
   
@@ -25,6 +27,7 @@ function DefaultSelect({
       className="w-full h-10 rounded-lg pl-4 cursor-pointer text-zinc-600 outline-none bg-white"
       icon={<></>}
       placeholder={placeholder}
+      defaultValue={defaultValue ?? null}
       {...register}
       {...props}
     >
