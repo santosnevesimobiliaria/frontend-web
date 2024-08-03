@@ -13,12 +13,13 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  SimpleGrid,
   Textarea,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { FaPhoneAlt } from 'react-icons/fa';
+import { LuPhoneCall } from 'react-icons/lu';
+import { FaWhatsapp } from 'react-icons/fa';
+import { IoLogoInstagram } from 'react-icons/io5';
 
 function Contato() {
   const {
@@ -44,10 +45,16 @@ function Contato() {
     redirectWhatsapp(message);
   };
 
+  function makeCall() {
+    const phoneNumber = '+5591981999538';
+    var uri = 'tel:' + encodeURIComponent(phoneNumber);
+    window.location.href = uri;
+  }
+
   return (
     <div className="flex flex-col w-full h-full">
       <PageHeader title="Contatos" />
-      <div className="flex w-full h-full justify-center items-start m-auto gap-4">
+      <div className="flex flex-col md:flex-row w-full h-full justify-center items-start m-auto gap-4">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full max-w-[500px]"
@@ -116,10 +123,33 @@ function Contato() {
             </span>
           </div>
         </form>
-        <div className="flex flex-col w-full max-w-[250px] h-full justify-start items-start bg-red-200">
+        <div className="flex flex-col w-full max-w-[250px] h-full justify-start items-start pt-6 ml-6 gap-4 md:ml-0 md:gap-0">
           <span className="text-lg font-medium">Contato direto:</span>
-          <span>
-            <div className="w-16 h-16 bg-red-700"></div>
+
+          <span className="flex flex-row gap-2">
+            <div
+              onClick={makeCall}
+              className="flex justify-center items-center w-12 h-12 text-white bg-gray-800 rounded-lg hover:bg-orange-600 cursor-pointer"
+            >
+              <LuPhoneCall size={22} />
+            </div>
+            <div
+              onClick={() => redirectWhatsapp()}
+              className="flex justify-center items-center w-12 h-12 text-white bg-gray-800 rounded-lg hover:bg-orange-600 cursor-pointer"
+            >
+              <FaWhatsapp size={22} />
+            </div>
+            <div
+              onClick={() => {
+                window.open(
+                  'https://www.instagram.com/santosneves.imobiliaria',
+                  '_blank'
+                );
+              }}
+              className="flex justify-center items-center w-12 h-12 text-white bg-gray-800 rounded-lg hover:bg-orange-600 cursor-pointer"
+            >
+              <IoLogoInstagram size={22} />
+            </div>
           </span>
         </div>
       </div>
