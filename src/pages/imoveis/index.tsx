@@ -119,7 +119,7 @@ function Imoveis() {
           </div>
           <span
             onClick={onOpen}
-            className="fixed bottom-6 right-6 z-10 flex justify-center items-center font-medium text-white bg-orange-600 w-14 h-14 rounded-full"
+            className="fixed bottom-6 right-6 z-10 flex justify-center items-center font-medium text-white bg-orange-600 w-14 h-14 rounded-full md:hidden"
           >
             <IoFilterSharp size={28} />
           </span>

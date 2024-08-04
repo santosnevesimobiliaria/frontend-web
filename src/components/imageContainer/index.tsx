@@ -36,7 +36,7 @@ function ImageContainer({
           }}
           className="absolute top-0 left-0 flex justify-center items-center w-full h-full text-white text-xl hover:scale-110"
         >
-          +10
+          +{showMoreImagesNumbers}
         </div>
       )}
     </div>
