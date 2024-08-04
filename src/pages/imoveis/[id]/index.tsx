@@ -4,7 +4,7 @@ import ImageSliderShow from '@/components/imageSliderShow';
 import PageHeader from '@/components/pageHeader';
 import { Box, SimpleGrid } from '@chakra-ui/react';
 import { FaBed, FaCar, FaShower, FaWhatsapp } from 'react-icons/fa';
-import { FaLocationDot } from 'react-icons/fa6';
+import { FaLocationDot, FaRulerCombined } from 'react-icons/fa6';
 
 const iconSize = 16;
 
@@ -100,7 +100,7 @@ function ImovelView() {
               </span>
             </div>
             <div className="flex flex-col w-full h-full max-h-[300px] bg-gray-200 p-4 rounded-lg gap-2">
-              <span className="w-fit font-bold border-b-2 border-zinc-600 pr-4">
+              <span className="w-fit font-bold border-b-2 border-zinc-600 pr-4 mb-4">
                 Detalhes do Imóvel
               </span>
               <div className="flex flex-col w-full">
@@ -141,7 +141,7 @@ function ImovelView() {
                 </SimpleGrid>
                 <SimpleGrid columns={3} className="mt-6">
                   <span className="flex items-center gap-2 text-nowrap">
-                    <IconFrame icon={<FaBed size={iconSize} />} />
+                    <IconFrame icon={<FaRulerCombined size={iconSize} />} />
                     <div className="flex flex-col justify-center items-center">
                       <span className="text-zinc-600 font-medium text-xs">
                         102,00 m²
@@ -150,7 +150,7 @@ function ImovelView() {
                     </div>
                   </span>
                   <span className="flex items-center gap-2 text-nowrap">
-                    <IconFrame icon={<FaBed size={iconSize} />} />
+                    <IconFrame icon={<FaRulerCombined size={iconSize} />} />
                     <div className="flex flex-col justify-center items-center">
                       <span className="text-zinc-600 font-medium text-xs">
                         102,00 m²
