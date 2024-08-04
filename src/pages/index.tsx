@@ -70,7 +70,7 @@ export default function Home() {
         <span className="text-3xl font-medium mt-4">
           Encontre o Imóvel dos seus sonhos
         </span>
-        <span className="flex flex-col gap-4 justify-between w-full py-4 mt-10 md:flex-row">
+        <span className="flex flex-col gap-3 justify-between w-full py-4 mt-10 md:flex-row">
           <DefaultTextInput placeholder="Código do Imóvel" />
           <DefaultButton
             text="Buscar pelo código do Imóvel"
