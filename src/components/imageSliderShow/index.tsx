@@ -72,7 +72,7 @@ function ImageSliderShow({ images, totalImages }: IImageSliderShow) {
 
   return (
     <>
-      <div className="flex w-full h-fit justify-center gap-2">
+      <div className="flex w-fit h-fit justify-center gap-2">
         <ImageContainer
           src={images[0]}
           sizeClassname={`${
