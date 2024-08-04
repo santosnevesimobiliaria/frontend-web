@@ -67,14 +67,10 @@ function ImovelView() {
                 '/images/casa1.jpg',
                 '/images/casa2.jpg',
                 '/images/casa3.jpg',
-                '/images/casa1.jpg',
-                '/images/casa2.jpg',
-                '/images/casa3.jpg',
-                '/images/casa1.jpg',
               ]}
-              totalImages={16}
+              totalImages={12}
             />
-            <div className="flex flex-col w-full h-full mt-10 border-b-2 border-zinc-600">
+            <div className="flex flex-col w-full h-full mt-10 border-b-2 border-zinc-600 pb-4">
               <span className="flex justify-center items-center w-[120px] h-[30px] bg-orange-600 text-white font-medium rounded-md z-50 mb-6">
                 Código: 200
               </span>
@@ -91,7 +87,8 @@ function ImovelView() {
                 <span>Código: 200</span>
               </span>
               <span className="flex flex-row justify-between items-center w-full h-[50px] px-2">
-                <span className="font-bold">Financiável</span>
+                {/* caso possa ser financiavel pintar de verde */}
+                <span className="font-bold text-red-600">Não financiável</span>
                 <span>R$ 700.000</span>
               </span>
               <span className="flex flex-row justify-around items-center w-full h-[50px]">
