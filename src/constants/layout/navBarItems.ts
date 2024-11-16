@@ -7,3 +7,9 @@ export const navbarItems: NavbarItemsConfig[] = [
   { title: 'Quero vender', link: '/contato?sell=1' },
   { title: 'Contato', link: '/contato' },
 ];
+
+export const navbarAdminItems:NavbarItemsConfig[] = [
+  {title: 'Anúncios', link: '/admin/anuncios'},
+  {title: 'Corretores', link: '/admin/corretores'},
+  {title: 'Voltar ao Site', link: '/'}
+]

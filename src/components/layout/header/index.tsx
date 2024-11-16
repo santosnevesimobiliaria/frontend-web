@@ -1,6 +1,6 @@
 import DefaultButton from '@/components/defaultButton';
 import FilterDrawer from '@/components/filtersDrawer';
-import { navbarItems } from '@/constants/layout/navBarItems';
+import { navbarItems, navbarAdminItems } from '@/constants/layout/navBarItems';
 import { NavbarItemsConfig } from '@/types/constants/navbarItemsInterface';
 import {
   Button,
@@ -12,6 +12,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  Image,
   SimpleGrid,
   Text,
   useDisclosure,
@@ -20,8 +21,14 @@ import {
 import React from 'react';
 import { FaBars } from 'react-icons/fa';
 
-function Header() {
+interface HeaderProps {
+  isAdmin: boolean;
+}
+
+function Header({ isAdmin }: HeaderProps) {
   const [isLargerThan1024] = useMediaQuery('(min-width: 1024px)');
+
+  const navbarButtons = isAdmin ? navbarAdminItems : navbarItems;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -67,7 +74,7 @@ function Header() {
             alignItems={'center'}
             gap={50}
           >
-            {navbarItems.map((navItem: NavbarItemsConfig) => (
+            {navbarButtons.map((navItem: NavbarItemsConfig) => (
               <Text
                 onClick={() => window.open(navItem.link, '_blank')}
                 cursor={'pointer'}
@@ -86,13 +93,28 @@ function Header() {
           alignItems={'center'}
           pr={isLargerThan1024 ? 8 : 4}
         >
-          <DefaultButton
-            onClinkFunc={onOpen}
-            text="Buscar Imóvel"
-            maxWidth={200}
-            isSearchButton
-            orangeSchema
-          />
+          {!isAdmin ? (
+            <DefaultButton
+              onClinkFunc={onOpen}
+              text="Buscar Imóvel"
+              maxWidth={200}
+              isSearchButton
+              orangeSchema
+            />
+          ) : (
+            <div className="relative flex w-12 h-12 bg-red-500 rounded-full overflow-hidden">
+              <Image
+                src={
+                  'https://res.cloudinary.com/dn9g7il79/image/upload/v1731773532/temp-listing-images/bsvlzplbmp4ojcqhmgf0.jpg'
+                }
+                style={{
+                  objectFit: 'cover',
+                }}
+                width={'100%'}
+                height={'100%'}
+              />
+            </div>
+          )}
         </Flex>
       </SimpleGrid>
       <FilterDrawer isOpen={isOpen} onClose={onClose} />
@@ -130,13 +152,6 @@ function Header() {
               ))}
             </div>
           </DrawerBody>
-
-          {/* <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="blue">Save</Button>
-          </DrawerFooter> */}
         </DrawerContent>
       </Drawer>
     </>
