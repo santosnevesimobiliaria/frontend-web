@@ -5,6 +5,9 @@ import type { AppProps } from 'next/app';
 
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const emotionCache = createCache({
   key: 'emotion-css-cache',
@@ -14,11 +17,13 @@ const emotionCache = createCache({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <CacheProvider value={emotionCache}>
-      <ChakraProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ChakraProvider>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ChakraProvider>
+      </QueryClientProvider>
     </CacheProvider>
   );
 }

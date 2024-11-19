@@ -22,13 +22,13 @@ import React from 'react';
 import { FaBars } from 'react-icons/fa';
 
 interface HeaderProps {
-  isAdmin: boolean;
+  startsWithAdmin: boolean;
 }
 
-function Header({ isAdmin }: HeaderProps) {
+function Header({ startsWithAdmin }: HeaderProps) {
   const [isLargerThan1024] = useMediaQuery('(min-width: 1024px)');
 
-  const navbarButtons = isAdmin ? navbarAdminItems : navbarItems;
+  const navbarButtons = startsWithAdmin ? navbarAdminItems : navbarItems;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -93,7 +93,7 @@ function Header({ isAdmin }: HeaderProps) {
           alignItems={'center'}
           pr={isLargerThan1024 ? 8 : 4}
         >
-          {!isAdmin ? (
+          {!startsWithAdmin ? (
             <DefaultButton
               onClinkFunc={onOpen}
               text="Buscar Imóvel"
