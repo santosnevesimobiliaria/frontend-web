@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>Santosneves Imóveis</title>
+        <title>Santos Imóveis</title>
       </Head>
       <body>
         <Main />

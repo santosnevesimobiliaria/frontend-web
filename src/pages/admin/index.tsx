@@ -1,13 +1,13 @@
-"use client"
-
 import DefaultButton from '@/components/defaultButton';
 import DefaultTextInput from '@/components/defaultTextInput';
 import { toaster } from '@/components/ui/toaster';
 import { defaultLoginSchema, TypeFormData } from '@/schemas/defaultLoginSchema';
 import { LoginAuth } from '@/services/auth';
-import { Image } from '@chakra-ui/react';
+import { cookieStorageManager, Image, useToast } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
+import { get } from 'http';
+import { setCookie } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface HandleLoginProps {
@@ -15,24 +15,45 @@ interface HandleLoginProps {
 }
 
 function Admin() {
+  const toaster = useToast();
+
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
+    getValues,
   } = useForm<TypeFormData>({ resolver: zodResolver(defaultLoginSchema) });
 
   const onSubmit: SubmitHandler<TypeFormData> = async (data) => {
     try {
       const { data: loginData } = await LoginAuth(data);
-      console.log(loginData);
-    } catch (error) {
-      toaster.craete({
-        title: 'teste',
-        type: 'success'
-      })
 
-      console.log(error);
+      setCookie(null, 'santos_imoveis.access_token', loginData.access_token, {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      });
+
+      toaster({
+        title: 'Login efetuado com sucesso',
+        description: 'Você será redirecionado para a página de administração',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
+
+      setTimeout(() => {
+        window.location.href = '/admin/anuncios';
+      }, 2000);
+
+    } catch (error) {
+      toaster({
+        title: 'Algo deu errado',
+        description: "Verifique se os dados estão corretos",
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
     }
   };
 

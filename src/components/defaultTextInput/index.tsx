@@ -1,4 +1,5 @@
-import { Input } from '@chakra-ui/react';
+import { PhoneIcon } from '@chakra-ui/icons';
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 
 type InputTypes =
   | 'button'
@@ -26,8 +27,8 @@ type InputTypes =
 
 interface IDefaultTextInput {
   inputType?: InputTypes;
-  placeholder?: string;
-  maxWidth?: number | 'unset';
+  placeholder?: string | any;
+  maxWidth?: number | string | 'unset';
   maxLength?: number;
   register?: any;
 }

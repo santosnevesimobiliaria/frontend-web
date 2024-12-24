@@ -9,6 +9,7 @@ interface IDefaultButton {
   maxWidth?: number | 'unset';
   orangeSchema?: boolean;
   onClinkFunc?: () => any;
+  disabled?: boolean;
   colorScheme?: string;
   isLoading?: boolean;
   isSearchButton?: boolean;
@@ -21,10 +22,11 @@ function DefaultButton({
   maxWidth,
   orangeSchema,
   onClinkFunc,
+  disabled = false,
   isLoading,
   isSearchButton,
   colorScheme,
-  leftIcon
+  leftIcon,
 }: IDefaultButton) {
   const leftIconConfig = leftIcon ? (
     leftIcon
@@ -36,6 +38,7 @@ function DefaultButton({
 
   return (
     <Button
+      isDisabled={disabled}
       type={buttonType ?? 'button'}
       onClick={onClinkFunc}
       className={`w-full h-10 ${
