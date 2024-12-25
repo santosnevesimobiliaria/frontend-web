@@ -15,7 +15,7 @@ interface CustomTableProps {
 
 function CustomTable({ headItens, bodyItens }: CustomTableProps) {
   return (
-    <TableContainer>
+    <TableContainer overflowY="auto">
       <Table size="sm">
         <Thead>
           <Tr>
@@ -34,7 +34,7 @@ function CustomTable({ headItens, bodyItens }: CustomTableProps) {
                   value = value ? value[k] : '';
                 });
                 return (
-                  <Td key={cellIndex}>
+                  <Td key={cellIndex} isTruncated  whiteSpace="nowrap">
                     {typeof value === 'object' ? value : String(value)}
                   </Td>
                 );

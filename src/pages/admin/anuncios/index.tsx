@@ -16,6 +16,13 @@ interface DashboardAnunciosProps {
 function DashboardAnuncios({ propertiesData }: DashboardAnunciosProps) {
   const router = useRouter();
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(price);
+  };
+
   const headItens = {
     id: 'Código',
     title: 'Título',
@@ -25,7 +32,7 @@ function DashboardAnuncios({ propertiesData }: DashboardAnunciosProps) {
   };
 
   const bodyItens = propertiesData?.map((property: Property) => {
-    return { ...property, actions: <Actions page='anuncios' propertyId={property.id} /> };
+    return { ...property, price: formatPrice(property.price), actions: <Actions page='anuncios' propertyId={property.id} /> };
   });
 
   return (
@@ -38,7 +45,7 @@ function DashboardAnuncios({ propertiesData }: DashboardAnunciosProps) {
         />
       </span>
       <span className="flex w-full justify-center items-center">
-        <DefaultTextInput maxWidth={'60%'} placeholder="Pesquisar anúncio" />
+        <DefaultTextInput maxWidth={'800px'} placeholder="Pesquisar anúncio" />
       </span>
       <CustomTable headItens={headItens} bodyItens={bodyItens} />
     </AdminLayout>

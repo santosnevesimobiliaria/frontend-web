@@ -1,12 +1,308 @@
-import AdminLayout from "@/layout/adminPageInnerLayout";
-import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
+import DefaultSelect from '@/components/deafultSelect';
+import DefaultButton from '@/components/defaultButton';
+import DefaultTextInput from '@/components/defaultTextInput';
+import {
+  condoFeatures,
+  numbersOptions,
+  propertyFeatures,
+} from '@/constants/addFeaturesOptions';
+import {
+  propertySubtypes,
+  propertyTypes,
+} from '@/constants/propertyTypesOptions';
+import AdminLayout from '@/layout/adminPageInnerLayout';
+import {
+  defaultProperySchema,
+  TypeFormData,
+} from '@/schemas/defaultPropertySchema';
+import { FaCamera } from 'react-icons/fa';
+import { IoMdClose } from 'react-icons/io';
+import {
+  Checkbox,
+  CheckboxGroup,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  SimpleGrid,
+  Stack,
+  Textarea,
+} from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useRef, useState } from 'react';
+
+const messageCharLimit = 600;
 
 function NovoAnuncio() {
+  const [temporaryImages, setTemporaryImages] = useState<string[]>([]);
+
+  const fileInputRef = useRef(null);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<TypeFormData>({ resolver: zodResolver(defaultProperySchema) });
+  const message = watch('description');
+
+  const handleButtonClick = () => {
+    // @ts-ignore
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event: any) => {
+    const files = event.target.files;
+    if (files.length > 0) {
+      console.log('Arquivos selecionados:', files);
+    }
+  };
+
+
+  const onSubmit: SubmitHandler<TypeFormData> = (data) => {
+    console.log(data);
+  };
+
+  const ImageContainer = () => {
+    return (
+      <div className="flex w-full max-w-40 h-32 rounded-xl shadow-neutral-200 bg-red-300 relative">
+        <span className="absolute -top-2 -right-3 cursor-pointer rounded-full bg-gray-700 p-1">
+          <IoMdClose color="white" size={18} />
+        </span>
+      </div>
+    );
+  };
+
   return (
-    <AdminLayout title="Novo Anúncio">
-      <div>
-        <h1>Novo Anúncio</h1>
+    <AdminLayout title="Novo Anúncio" infinity>
+      <div className="flex flex-col justify-center items-center gap-6 w-full h-full pt-4 overflow-auto">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-6 w-full h-full py-10 max-w-[800px]"
+        >
+          <FormControl isRequired isInvalid={!!errors.title}>
+            <FormLabel>Título</FormLabel>
+            <DefaultTextInput register={{ ...register('title') }} />
+            <FormErrorMessage>
+              {errors.title && errors.title.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid={!!errors.description}>
+            <FormLabel>Descrição</FormLabel>
+            <Textarea
+              className="bg-white h-40"
+              maxLength={messageCharLimit}
+              resize={'none'}
+              {...register('description')}
+            />
+            <span
+              className={`flex justify-end w-full text-xs ${
+                message?.length === messageCharLimit && 'text-red-700 text-base'
+              }`}
+            >
+              {message?.length ?? 0}/{messageCharLimit}
+            </span>
+            <FormErrorMessage>
+              {errors.description && errors.description.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid={!!errors.property_type}>
+            <FormLabel>Tipo</FormLabel>
+            <DefaultSelect
+              placeholder="Selecione"
+              options={propertyTypes}
+              register={{ ...register('property_type') }}
+            />
+            <FormErrorMessage>
+              {errors.property_type && errors.property_type.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.property_subtype}>
+            <FormLabel>Subtipo</FormLabel>
+            <DefaultSelect
+              placeholder="Selecione"
+              options={propertySubtypes}
+              register={{ ...register('property_subtype') }}
+            />
+            <FormErrorMessage>
+              {errors.property_subtype && errors.property_subtype.message}
+            </FormErrorMessage>
+          </FormControl>
+          {/* <FormControl isRequired isInvalid={!!errors.property_subtype}>
+            <FormLabel>Compra ou venda?</FormLabel>
+            <RadioGroup>
+              <Stack direction="row">
+                <Radio {...register('property_subtype')} value={PropertySubtype.Comprar}>
+                  Comprar
+                </Radio>
+                <Radio {...register('property_subtype')} value="2">
+                  vender
+                </Radio>
+              </Stack>
+            </RadioGroup>
+            <FormErrorMessage>
+              {errors.property_subtype && errors.property_subtype.message}
+            </FormErrorMessage>
+          </FormControl> */}
+          <FormControl isRequired isInvalid={!!errors.bedroom}>
+            <FormLabel>Número de quartos</FormLabel>
+            <DefaultSelect
+              placeholder="Selecione"
+              options={numbersOptions}
+              register={{ ...register('bedroom') }}
+            />
+            <FormErrorMessage>
+              {errors.bedroom && errors.bedroom.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid={!!errors.bathroom}>
+            <FormLabel>Número de banheiros</FormLabel>
+            <DefaultSelect
+              placeholder="Selecione"
+              options={numbersOptions}
+              register={{ ...register('bathroom') }}
+            />
+            <FormErrorMessage>
+              {errors.bathroom && errors.bathroom.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid={!!errors.total_area}>
+            <FormLabel>Área Total (m²)</FormLabel>
+            <DefaultTextInput register={{ ...register('total_area') }} />
+            <FormErrorMessage>
+              {errors.total_area && errors.total_area.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.useful_area}>
+            <FormLabel>Área Útil (m²)</FormLabel>
+            <DefaultTextInput register={{ ...register('useful_area') }} />
+            <FormErrorMessage>
+              {errors.useful_area && errors.useful_area.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid={!!errors.parking_spaces}>
+            <FormLabel>Vagas de Garagem</FormLabel>
+            <DefaultSelect
+              placeholder="Selecione"
+              options={numbersOptions}
+              register={{ ...register('parking_spaces') }}
+            />
+            <FormErrorMessage>
+              {errors.parking_spaces && errors.parking_spaces.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.condon_price}>
+            <FormLabel>Condomínio (R$)</FormLabel>
+            <DefaultTextInput register={{ ...register('condon_price') }} />
+            <FormErrorMessage>
+              {errors.condon_price && errors.condon_price.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.iptu}>
+            <FormLabel>IPTU (R$)</FormLabel>
+            <DefaultTextInput register={{ ...register('iptu') }} />
+            <FormErrorMessage>
+              {errors.iptu && errors.iptu.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.property_features}>
+            <FormLabel>Detalhes do Imóvel</FormLabel>
+            <SimpleGrid
+              className="w-full"
+              columns={{ sm: 1, md: 1, lg: 2, xl: 2 }}
+              spacingY={2}
+              spacingX={1}
+            >
+              {propertyFeatures.map((feature) => (
+                <Checkbox
+                  key={feature.value}
+                  value={feature.value}
+                  onChange={(e) => {
+                    setValue('property_features', {
+                      ...watch('property_features'),
+                      [feature.value]: e.target.checked,
+                    });
+                  }}
+                >
+                  {feature.title}
+                </Checkbox>
+              ))}
+            </SimpleGrid>
+            <FormErrorMessage>
+              {errors.property_features && errors.property_features.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.condo_features}>
+            <FormLabel>Detalhes do condomínio</FormLabel>
+            <SimpleGrid
+              className="w-full"
+              columns={{ sm: 1, md: 1, lg: 2, xl: 2 }}
+              spacingY={2}
+              spacingX={1}
+            >
+              {condoFeatures.map((feature) => (
+                <Checkbox
+                  key={feature.value}
+                  value={feature.value}
+                  onChange={(e) => {
+                    setValue('condo_features', {
+                      ...watch('condo_features'),
+                      [feature.value]: e.target.checked,
+                    });
+                  }}
+                >
+                  {feature.title}
+                </Checkbox>
+              ))}
+            </SimpleGrid>
+            <FormErrorMessage>
+              {errors.condo_features && errors.condo_features.message}
+            </FormErrorMessage>
+          </FormControl>
+
+          {/* start image upload contariner */}
+          <div className="flex flex-col my-10">
+            <strong>Fotos</strong>
+            <span>
+              Adicione até <strong>20 fotos</strong>
+            </span>
+            <SimpleGrid
+              className="w-full mt-4 max-w-[400px]"
+              columns={{ sm: 1, md: 1, lg: 2, xl: 2 }}
+              spacingY={1}
+              spacingX={1}
+            >
+              <input ref={fileInputRef} className='hidden' type="file" onChange={handleFileChange}/>
+              <div onClick={handleButtonClick} className="flex flex-col justify-center items-center w-full max-w-40 h-32 rounded-xl cursor-pointer shadow-neutral-200 border-dashed border border-orange-600 text-orange-600">
+                <FaCamera color="#EA580C" size={30} />
+                <span className="font-semibold text-lg">Adicionar Fotos</span>
+                <span className="text-xs"> JPG, GIF e PNG somente </span>
+              </div>
+              <ImageContainer />
+            </SimpleGrid>
+          </div>
+
+          {/* end image upload contariner */}
+
+          <FormControl isRequired isInvalid={!!errors.price}>
+            <FormLabel>Preço (R$)</FormLabel>
+            <DefaultTextInput register={{ ...register('price') }} />
+            <FormErrorMessage>
+              {errors.price && errors.price.message}
+            </FormErrorMessage>
+          </FormControl>
+
+          <DefaultButton
+            text="Enviar anúncio"
+            orangeSchema
+            buttonType="submit"
+          />
+        </form>
       </div>
     </AdminLayout>
   );

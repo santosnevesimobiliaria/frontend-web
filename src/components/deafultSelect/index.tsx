@@ -6,7 +6,7 @@ interface IOptions {
 }
 
 interface IDefaultSelect {
-  placeholder: string;
+  placeholder?: string;
   options: IOptions[];
   maxWidth?: number;
   register?: any;
