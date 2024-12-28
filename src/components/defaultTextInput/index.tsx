@@ -31,6 +31,7 @@ interface IDefaultTextInput {
   maxWidth?: number | string | 'unset';
   maxLength?: number;
   register?: any;
+  [key: string]: any;
 }
 
 function DefaultTextInput({
@@ -39,6 +40,7 @@ function DefaultTextInput({
   maxWidth,
   maxLength,
   register,
+  ...rest
 }: IDefaultTextInput) {
   return (
     <Input
@@ -48,6 +50,7 @@ function DefaultTextInput({
       maxWidth={maxWidth}
       placeholder={placeholder}
       {...register}
+      {...rest}
     />
   );
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { parseCookies } from 'nookies';
 
 export function getAPIClient(ctx?: any) {
-  const { 'santosadmin.token': token } = parseCookies(ctx);
+  const { 'santos_imoveis.access_token': token } = parseCookies(ctx);
   const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
@@ -19,17 +19,3 @@ export function getAPIClient(ctx?: any) {
 }
 
 export const api = getAPIClient();
-
-
-// export async function getServerSideProps(context) {
-//   const { ['estech.token']: token } = parseCookies(context);
-
-//   if (!token) {
-//     return {
-//       redirect: {
-//         destination: `/auth/login?from=${context.resolvedUrl}`,
-//         permanent: false,
-//       },
-//     };
-//   }
-// }

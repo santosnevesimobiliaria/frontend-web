@@ -26,21 +26,41 @@ import {
   Radio,
   RadioGroup,
   SimpleGrid,
+  Spinner,
   Stack,
   Textarea,
+  useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GetServerSideProps } from 'next';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useRef, useState } from 'react';
+import { api } from '@/services/axios';
+import { priceMask } from '@/utils/priceMask';
+
+type ImageType = {
+  publicId: string;
+  url: string;
+};
+
+type CoverImageType = {
+  publicId: string;
+  index: number;
+};
 
 const messageCharLimit = 600;
 
 function NovoAnuncio() {
-  const [temporaryImages, setTemporaryImages] = useState<string[]>([]);
-
+  const toaster = useToast();
   const fileInputRef = useRef(null);
+
+  const [temporaryImages, setTemporaryImages] = useState<ImageType[]>([]);
+  const [mainImage, setMainImage] = useState<CoverImageType | null>(null);
+
+  //loading
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   const {
     register,
@@ -56,26 +76,147 @@ function NovoAnuncio() {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event: any) => {
-    const files = event.target.files;
-    if (files.length > 0) {
-      console.log('Arquivos selecionados:', files);
+  const handleSendImages = async (files: FileList) => {
+    try {
+      setLoadingUpdate(true);
+
+      const formData = new FormData();
+
+      Array.from(files).forEach((file) => {
+        formData.append('files', file);
+      });
+
+      const response = await api.post('upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      setTemporaryImages(response?.data);
+    } catch (error) {
+      console.error('Erro ao enviar imagens:', error);
+
+      toaster({
+        title: 'Erro ao enviar imagens',
+        description: 'Favor informar o Cezar',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    } finally {
+      setLoadingUpdate(false);
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      handleSendImages(files);
+    }
+  };
 
   const onSubmit: SubmitHandler<TypeFormData> = (data) => {
     console.log(data);
   };
 
-  const ImageContainer = () => {
+  const handleDeleteImage = async (publicId: string) => {
+    try {
+      setLoadingDelete(true);
+
+      if (mainImage?.publicId === publicId) {
+        setMainImage(null);
+      }
+
+      const formattedPublicId = publicId.slice(publicId.indexOf('/') + 1);
+
+      const { data } = await api.delete(`upload/${formattedPublicId}`);
+
+      const newImages = temporaryImages.filter(
+        (image) => image.publicId !== publicId
+      );
+
+      setTemporaryImages(newImages);
+
+      toaster({
+        title: 'Sucesso!',
+        description: data?.message,
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    } catch (error: any) {
+      console.error('Erro ao deletar imagem:', error);
+      toaster({
+        title: 'Erro ao deletar imagem',
+        description: error?.response?.data?.message || 'Favor informar o Cezar',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    } finally {
+      setLoadingDelete(false);
+    }
+  };
+
+  const ImageContainer = ({
+    publicId,
+    src,
+  }: {
+    publicId: string;
+    src: string;
+  }) => {
+    const isMainImage = mainImage?.publicId === publicId;
+
+    const handleSetMainImage = () => {
+      const index = temporaryImages.findIndex(
+        (image) => image.publicId === publicId
+      );
+
+      setMainImage({ publicId, index });
+    };
+
+    const mainImageStyle = isMainImage ? 'border-4 border-purple-600' : '';
+
     return (
-      <div className="flex w-full max-w-40 h-32 rounded-xl shadow-neutral-200 bg-red-300 relative">
-        <span className="absolute -top-2 -right-3 cursor-pointer rounded-full bg-gray-700 p-1">
+      <div className="relative">
+        <div
+          key={publicId}
+          style={{
+            backgroundImage: `url(${src})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+          className={`flex w-full max-w-40 h-32 rounded-xl shadow-neutral-200 relative cursor-pointer ${mainImageStyle}`}
+          onClick={handleSetMainImage}
+        >
+          {loadingDelete && (
+            <div className="absolute w-full h-full bg-black bg-opacity-50 flex justify-center items-center rounded-xl">
+              <Spinner size="lg" color="purple" />
+            </div>
+          )}
+          {isMainImage && (
+            <div className="flex flex-col uppercase font-bold text-xl text-purple-600 w-full h-full justify-center items-center">
+              <span>capa</span>
+              <span>selecionada</span>
+            </div>
+          )}
+        </div>
+        <span
+          onClick={() => handleDeleteImage(publicId)}
+          className="absolute -top-2 right-6 cursor-pointer rounded-full bg-gray-700 p-1"
+        >
           <IoMdClose color="white" size={18} />
         </span>
       </div>
     );
+  };
+
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value.replace(/\D/g, '');
+    const formattedPrice = priceMask(input);
+    setValue('price', formattedPrice);
   };
 
   return (
@@ -233,9 +374,6 @@ function NovoAnuncio() {
                 </Checkbox>
               ))}
             </SimpleGrid>
-            <FormErrorMessage>
-              {errors.property_features && errors.property_features.message}
-            </FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.condo_features}>
             <FormLabel>Detalhes do condomínio</FormLabel>
@@ -260,9 +398,6 @@ function NovoAnuncio() {
                 </Checkbox>
               ))}
             </SimpleGrid>
-            <FormErrorMessage>
-              {errors.condo_features && errors.condo_features.message}
-            </FormErrorMessage>
           </FormControl>
 
           {/* start image upload contariner */}
@@ -274,16 +409,35 @@ function NovoAnuncio() {
             <SimpleGrid
               className="w-full mt-4 max-w-[400px]"
               columns={{ sm: 1, md: 1, lg: 2, xl: 2 }}
-              spacingY={1}
+              spacingY={4}
               spacingX={1}
             >
-              <input ref={fileInputRef} className='hidden' type="file" onChange={handleFileChange}/>
-              <div onClick={handleButtonClick} className="flex flex-col justify-center items-center w-full max-w-40 h-32 rounded-xl cursor-pointer shadow-neutral-200 border-dashed border border-orange-600 text-orange-600">
-                <FaCamera color="#EA580C" size={30} />
-                <span className="font-semibold text-lg">Adicionar Fotos</span>
-                <span className="text-xs"> JPG, GIF e PNG somente </span>
+              <input
+                ref={fileInputRef}
+                className="hidden"
+                type="file"
+                multiple
+                onChange={handleFileChange}
+              />
+              <div
+                onClick={handleButtonClick}
+                className="flex flex-col justify-center items-center w-full max-w-40 h-32 rounded-xl cursor-pointer shadow-neutral-200 border-dashed border border-orange-600 text-orange-600"
+              >
+                {loadingUpdate ? (
+                  <Spinner size="lg" color="#EA580C" />
+                ) : (
+                  <>
+                    <FaCamera color="#EA580C" size={30} />
+                    <span className="font-semibold text-lg">
+                      Adicionar Fotos
+                    </span>
+                    <span className="text-xs"> JPG, GIF e PNG somente </span>
+                  </>
+                )}
               </div>
-              <ImageContainer />
+              {temporaryImages.map((image) => (
+                <ImageContainer publicId={image.publicId} src={image.url} />
+              ))}
             </SimpleGrid>
           </div>
 
@@ -291,13 +445,17 @@ function NovoAnuncio() {
 
           <FormControl isRequired isInvalid={!!errors.price}>
             <FormLabel>Preço (R$)</FormLabel>
-            <DefaultTextInput register={{ ...register('price') }} />
+            <DefaultTextInput
+              register={{ ...register('price') }}
+              onChange={handlePriceChange}
+            />
             <FormErrorMessage>
               {errors.price && errors.price.message}
             </FormErrorMessage>
           </FormControl>
 
           <DefaultButton
+            disabled={mainImage === null}
             text="Enviar anúncio"
             orangeSchema
             buttonType="submit"
