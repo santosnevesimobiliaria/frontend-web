@@ -115,8 +115,11 @@ function NovoAnuncio() {
   };
 
   const onSubmit: SubmitHandler<TypeFormData> = (data) => {
-    console.log(data);
+    console.log('data: ', data);
+    console.log('errors: ', errors);
   };
+
+  console.log('errors: ', errors);
 
   const handleDeleteImage = async (publicId: string) => {
     try {
@@ -455,7 +458,7 @@ function NovoAnuncio() {
           </FormControl>
 
           <DefaultButton
-            disabled={mainImage === null}
+            // disabled={mainImage === null}
             text="Enviar anúncio"
             orangeSchema
             buttonType="submit"
