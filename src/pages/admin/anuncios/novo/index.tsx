@@ -35,9 +35,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { GetServerSideProps } from 'next';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { api } from '@/services/axios';
 import { priceMask } from '@/utils/priceMask';
+import { PropertySubtype, PropertyType } from '@/types/enums/propertyEnum';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 type ImageType = {
   publicId: string;
@@ -49,14 +52,41 @@ type CoverImageType = {
   index: number;
 };
 
+const defaultPropertyFeatures = {
+  serviceArea: false,
+  bedroomClosets: false,
+  kitchenCabinets: false,
+  furnished: false,
+  airConditioning: false,
+  barbecueGrill: false,
+  balcony: false,
+  gym: false,
+  swimmingPool: false,
+  serviceRoom: false,
+};
+
+const defaultCondoFeatures = {
+  gatedCommunity: false,
+  elevator: false,
+  security24h: false,
+  concierge: false,
+  petsAllowed: false,
+  gym: false,
+  swimmingPool: false,
+  partyHall: false,
+};
+
 const messageCharLimit = 600;
 
 function NovoAnuncio() {
   const toaster = useToast();
+  const router = useRouter();
   const fileInputRef = useRef(null);
 
   const [temporaryImages, setTemporaryImages] = useState<ImageType[]>([]);
   const [mainImage, setMainImage] = useState<CoverImageType | null>(null);
+  const [realtorList, setRealtorList] = useState([]);
+  const [propertyAddress, setPropertyAddress] = useState(null);
 
   //loading
   const [loadingUpdate, setLoadingUpdate] = useState(false);
@@ -115,11 +145,62 @@ function NovoAnuncio() {
   };
 
   const onSubmit: SubmitHandler<TypeFormData> = (data) => {
-    console.log('data: ', data);
-    console.log('errors: ', errors);
-  };
+    const formattedData = {
+      ...data,
+      images: temporaryImages.map((image) => image.url),
+      ad_image_cover: mainImage?.index,
+      financeable: data.financeable === 'true',
+      bedroom: parseInt(data.bedroom),
+      bathroom: parseInt(data.bathroom),
+      parking_spaces: parseInt(data.parking_spaces),
+      useful_area: data.useful_area ? parseInt(data.useful_area) : null,
+      total_area: parseInt(data.total_area),
+      condon_price: data.condon_price ? parseInt(data.condon_price) : null,
+      iptu: data.iptu ? parseInt(data.iptu) : null,
+      realtorId: parseInt(data.realtorId),
+      price: parseInt(data.price.replace(/\./g, ""), 10),
+      address: propertyAddress,
+      Property_type:
+        PropertyType[data.Property_type as keyof typeof PropertyType],
+      Property_subtype: data.Property_subtype
+        ? PropertySubtype[data.Property_subtype as keyof typeof PropertySubtype]
+        : null,
+      property_features: {
+        ...defaultPropertyFeatures,
+        ...data.property_features,
+      },
+      condo_features: {
+        ...defaultCondoFeatures,
+        ...data.condo_features,
+      },
+    };
 
-  console.log('errors: ', errors);
+    try {
+      api.post('/properties', formattedData);
+
+      toaster({
+        title: 'Anúncio enviado com sucesso',
+        description: 'Seu anúncio foi publicado com sucesso!',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
+
+      router.push('/admin/anuncios');
+    } catch (error: any) {
+      console.error('Erro ao enviar anúncio:', error);
+
+      toaster({
+        title: 'Erro ao enviar anúncio',
+        description: error?.response?.data?.message || 'Favor informar o Cezar',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  };
 
   const handleDeleteImage = async (publicId: string) => {
     try {
@@ -222,6 +303,68 @@ function NovoAnuncio() {
     setValue('price', formattedPrice);
   };
 
+  const getAddress = async (zipCode: string) => {
+    try {
+      const { data } = await axios.get(
+        'https://viacep.com.br/ws/' + zipCode + '/json/'
+      );
+
+      setPropertyAddress(data);
+
+      toaster({
+        title: 'Endereço encontrado',
+        description: 'Endereço encontrado com sucesso!',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    } catch (error) {
+      console.error('Erro ao buscar endereço:', error);
+
+      toaster({
+        title: 'Erro ao buscar endereço',
+        description: 'Favor informar o Cezar',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  };
+
+  const handleZipCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let value = event.target.value.replace(/\D/g, '');
+    if (value.length > 5) {
+      value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+    }
+
+    if (value.length === 9) {
+      getAddress(value);
+    }
+
+    setValue('address', value);
+  };
+
+  useEffect(() => {
+    const getRealtors = async () => {
+      try {
+        const { data } = await api.get('/realtor/list');
+
+        const formattedRealtors = data.map((realtor: any) => ({
+          title: realtor.name,
+          value: realtor.id,
+        }));
+
+        setRealtorList(formattedRealtors);
+      } catch (error) {
+        console.error('Erro ao buscar corretores:', error);
+      }
+    };
+
+    getRealtors();
+  }, []);
+
   return (
     <AdminLayout title="Novo Anúncio" infinity>
       <div className="flex flex-col justify-center items-center gap-6 w-full h-full pt-4 overflow-auto">
@@ -255,26 +398,26 @@ function NovoAnuncio() {
               {errors.description && errors.description.message}
             </FormErrorMessage>
           </FormControl>
-          <FormControl isRequired isInvalid={!!errors.property_type}>
+          <FormControl isRequired isInvalid={!!errors.Property_type}>
             <FormLabel>Tipo</FormLabel>
             <DefaultSelect
               placeholder="Selecione"
               options={propertyTypes}
-              register={{ ...register('property_type') }}
+              register={{ ...register('Property_type') }}
             />
             <FormErrorMessage>
-              {errors.property_type && errors.property_type.message}
+              {errors.Property_type && errors.Property_type.message}
             </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={!!errors.property_subtype}>
+          <FormControl isInvalid={!!errors.Property_subtype}>
             <FormLabel>Subtipo</FormLabel>
             <DefaultSelect
               placeholder="Selecione"
               options={propertySubtypes}
-              register={{ ...register('property_subtype') }}
+              register={{ ...register('Property_subtype') }}
             />
             <FormErrorMessage>
-              {errors.property_subtype && errors.property_subtype.message}
+              {errors.Property_subtype && errors.Property_subtype.message}
             </FormErrorMessage>
           </FormControl>
           {/* <FormControl isRequired isInvalid={!!errors.property_subtype}>
@@ -354,6 +497,30 @@ function NovoAnuncio() {
               {errors.iptu && errors.iptu.message}
             </FormErrorMessage>
           </FormControl>
+          <FormControl isRequired isInvalid={!!errors.financeable}>
+            <FormLabel>É Financiável?</FormLabel>
+            <RadioGroup>
+              <Stack direction="column">
+                <Radio
+                  colorScheme="orange"
+                  {...register('financeable')}
+                  value="true"
+                >
+                  Sim
+                </Radio>
+                <Radio
+                  colorScheme="orange"
+                  {...register('financeable')}
+                  value="false"
+                >
+                  Não
+                </Radio>
+              </Stack>
+            </RadioGroup>
+            <FormErrorMessage>
+              {errors.financeable && errors.financeable.message}
+            </FormErrorMessage>
+          </FormControl>
           <FormControl isInvalid={!!errors.property_features}>
             <FormLabel>Detalhes do Imóvel</FormLabel>
             <SimpleGrid
@@ -372,6 +539,7 @@ function NovoAnuncio() {
                       [feature.value]: e.target.checked,
                     });
                   }}
+                  colorScheme="orange"
                 >
                   {feature.title}
                 </Checkbox>
@@ -396,6 +564,7 @@ function NovoAnuncio() {
                       [feature.value]: e.target.checked,
                     });
                   }}
+                  colorScheme="orange"
                 >
                   {feature.title}
                 </Checkbox>
@@ -438,8 +607,12 @@ function NovoAnuncio() {
                   </>
                 )}
               </div>
-              {temporaryImages.map((image) => (
-                <ImageContainer publicId={image.publicId} src={image.url} />
+              {temporaryImages.map((image, index) => (
+                <ImageContainer
+                  key={index}
+                  publicId={image.publicId}
+                  src={image.url}
+                />
               ))}
             </SimpleGrid>
           </div>
@@ -457,8 +630,31 @@ function NovoAnuncio() {
             </FormErrorMessage>
           </FormControl>
 
+          <FormControl isRequired isInvalid={!!errors.address}>
+            <FormLabel>Localização (CEP)</FormLabel>
+            <DefaultTextInput
+              register={{ ...register('address') }}
+              onChange={handleZipCodeChange}
+            />
+            <FormErrorMessage>
+              {errors.address && errors.address.message}
+            </FormErrorMessage>
+          </FormControl>
+
+          <FormControl isRequired isInvalid={!!errors.realtorId}>
+            <FormLabel>Corretor Responsável</FormLabel>
+            <DefaultSelect
+              placeholder="Selecione"
+              options={realtorList}
+              register={{ ...register('realtorId') }}
+            />
+            <FormErrorMessage>
+              {errors.realtorId && errors.realtorId.message}
+            </FormErrorMessage>
+          </FormControl>
+
           <DefaultButton
-            // disabled={mainImage === null}
+            disabled={mainImage === null}
             text="Enviar anúncio"
             orangeSchema
             buttonType="submit"

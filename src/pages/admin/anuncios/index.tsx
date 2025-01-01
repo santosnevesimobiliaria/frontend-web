@@ -8,6 +8,7 @@ import { Property } from '@/types/propertiesType';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
+import { useState } from 'react';
 
 interface DashboardAnunciosProps {
   propertiesData: Property[];
@@ -15,6 +16,23 @@ interface DashboardAnunciosProps {
 
 function DashboardAnuncios({ propertiesData }: DashboardAnunciosProps) {
   const router = useRouter();
+
+  const [data, setData] = useState<Property[]>(propertiesData);
+  const [loading, setLoading] = useState(false);
+
+  const getData = async () => {
+    try {
+      setLoading(true);
+
+      const response = await api.get('/properties');
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }finally{
+      setLoading(false);
+    }
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -31,8 +49,8 @@ function DashboardAnuncios({ propertiesData }: DashboardAnunciosProps) {
     actions: 'Ações',
   };
 
-  const bodyItens = propertiesData?.map((property: Property) => {
-    return { ...property, price: formatPrice(property.price), actions: <Actions page='anuncios' propertyId={property.id} /> };
+  const bodyItens = data?.map((property: Property) => {
+    return { ...property, price: formatPrice(property.price), actions: <Actions reloadFunc={() => getData()} page='anuncios' propertyId={property.id} /> };
   });
 
   return (
@@ -47,7 +65,7 @@ function DashboardAnuncios({ propertiesData }: DashboardAnunciosProps) {
       <span className="flex w-full justify-center items-center">
         <DefaultTextInput maxWidth={'800px'} placeholder="Pesquisar anúncio" />
       </span>
-      <CustomTable headItens={headItens} bodyItens={bodyItens} />
+      <CustomTable headItens={headItens} bodyItens={bodyItens} loading={loading} />
     </AdminLayout>
   );
 }

@@ -6,18 +6,10 @@ export const defaultProperySchema = z.object({
   price: z.string().nonempty({ message: 'O preço é obrigatório' }),
   condon_price: z.string().optional(),
   iptu: z.string().optional(),
-  images: z
-    .array(z.string())
-    .nonempty({ message: 'As imagens são obrigatórias' }),
-  ad_image_cover: z
-    .number()
-    .refine((val) => val >= 0, { message: 'A imagem de capa é obrigatória' }),
   description: z.string().nonempty({ message: 'A descrição é obrigatória' }),
-  property_type: z.string(),
-  property_subtype: z.string().optional(),
-  financeable: z.boolean().refine((val) => val !== undefined, {
-    message: 'A informação de financiável é obrigatória',
-  }),
+  Property_type: z.string(),
+  Property_subtype: z.string().optional(),
+  financeable: z.string(),
   bedroom: z.string().refine((val) => parseInt(val) > 0, {
     message: 'O número de quartos é obrigatório',
   }),
@@ -32,9 +24,12 @@ export const defaultProperySchema = z.object({
     message: 'O número de vagas de estacionamento é obrigatório',
   }),
   videotour_url: z.string().optional(),
+  address: z.string().nonempty({ message: 'O CEP é obrigatório' }),
   realtorId: z
-    .number()
-    .refine((val) => val > 0, { message: 'O ID do corretor é obrigatório' }),
+    .string()
+    .refine((val) => parseInt(val) > 0, {
+      message: 'O ID do corretor é obrigatório',
+    }),
   property_features: z
     .object({
       serviceArea: z.boolean().optional(),
