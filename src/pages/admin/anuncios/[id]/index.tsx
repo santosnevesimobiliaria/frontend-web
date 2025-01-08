@@ -128,17 +128,17 @@ function NovoAnuncio() {
           ].toString()
         );
       }
-      setValue('bedroom', data.bedroom);
-      setValue('bathroom', data.bathroom);
-      setValue('total_area', data.total_area);
-      setValue('useful_area', data.useful_area);
-      setValue('parking_spaces', data.parking_spaces);
-      setValue('condon_price', data.condon_price);
-      setValue('iptu', data.iptu);
+      setValue('bedroom', data.bedroom.toString());
+      setValue('bathroom', data.bathroom.toString());
+      setValue('total_area', data.total_area.toString());
+      setValue('useful_area', data.useful_area ? data.useful_area.toString() : '');
+      setValue('parking_spaces', data.parking_spaces.toString());
+      setValue('condon_price', data.condon_price ? data.condon_price.toString() : '');
+      setValue('iptu', data.iptu ? data.iptu.toString() : '');
       setValue('financeable', data.financeable.toString());
-      setValue('price', data.price);
-      setValue('address', data.address?.cep);
-      setValue('realtorId', data.realtorId);
+      setValue('price', data.price.toString());
+      setValue('address', data.address?.cep.toString());
+      setValue('realtorId', data.realtorId.toString());
 
       setValue('property_features.serviceArea', data.property_features.serviceArea);
       setValue('property_features.bedroomClosets', data.property_features.bedroomClosets);
@@ -251,7 +251,7 @@ function NovoAnuncio() {
     };
 
     try {
-      api.post('/properties', formattedData);
+      api.patch(`/properties/${id}`, formattedData);
 
       toaster({
         title: 'Anúncio enviado com sucesso',
