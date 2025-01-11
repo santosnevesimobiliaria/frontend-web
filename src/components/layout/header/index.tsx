@@ -74,8 +74,9 @@ function Header({ startsWithAdmin }: HeaderProps) {
             alignItems={'center'}
             gap={50}
           >
-            {navbarButtons.map((navItem: NavbarItemsConfig) => (
+            {navbarButtons.map((navItem: NavbarItemsConfig, index) => (
               <Text
+                key={index}
                 onClick={() => window.open(navItem.link, '_blank')}
                 cursor={'pointer'}
                 className="text-lg font-medium text-orange-600 hover:text-[#580CEA] text-nowrap"
@@ -104,6 +105,7 @@ function Header({ startsWithAdmin }: HeaderProps) {
           ) : (
             <div className="relative flex w-12 h-12 bg-red-500 rounded-full overflow-hidden">
               <Image
+                alt='Imagem admin'
                 src={
                   'https://res.cloudinary.com/dn9g7il79/image/upload/v1731773532/temp-listing-images/bsvlzplbmp4ojcqhmgf0.jpg'
                 }
@@ -141,8 +143,9 @@ function Header({ startsWithAdmin }: HeaderProps) {
 
           <DrawerBody>
             <div className="flex flex-col w-full h-full gap-4">
-              {navbarItems.map((navItem: NavbarItemsConfig) => (
+              {navbarItems.map((navItem: NavbarItemsConfig, index) => (
                 <Text
+                  key={index}
                   onClick={() => window.open(navItem.link, '_blank')}
                   cursor={'pointer'}
                   className="text-lg font-medium text-orange-600 hover:text-[#580CEA] text-nowrap"

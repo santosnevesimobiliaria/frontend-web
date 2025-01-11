@@ -1,6 +1,5 @@
 import DefaultButton from '@/components/defaultButton';
 import DefaultTextInput from '@/components/defaultTextInput';
-import { toaster } from '@/components/ui/toaster';
 import { defaultLoginSchema, TypeFormData } from '@/schemas/defaultLoginSchema';
 import { LoginAuth } from '@/services/auth';
 import { cookieStorageManager, Image, useToast } from '@chakra-ui/react';

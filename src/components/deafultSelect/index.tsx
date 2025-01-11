@@ -31,8 +31,8 @@ function DefaultSelect({
       {...register}
       {...props}
     >
-      {options?.map((option: IOptions) => (
-        <option className="cursor-pointer" value={option?.value}>
+      {options?.map((option: IOptions, index) => (
+        <option key={index} className="cursor-pointer" value={option?.value}>
           {option?.title}
         </option>
       ))}
